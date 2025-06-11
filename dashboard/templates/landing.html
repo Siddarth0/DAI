@@ -54,12 +54,7 @@
 </section>
 {% comment  %}[#F5F8FF]{% endcomment %}
 <section class="relative bg-[#F5F8FF] px-6 pt-16 pb-40 overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-40 overflow-hidden" style="pointer-events: none;">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full" style="transform: scaleY(-1);"> {# Added transform: scaleY(-1) #}
-            {# The path will now be flipped vertically. Fill color matches the background of the section ABOVE this section #}
-            <path d="M0,100 L100,100 L100,0 C70,50 30,50 0,0 Z" fill="#f9fafb"></path>
-        </svg>
-    </div>
+
     <div class="text-center mb-8">
         <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
         <p class="text-lg text-gray-600">Access business development resources, apply for government support schemes, and grow your enterprise.</p>
@@ -130,7 +125,7 @@
             <!-- Card 1: Register and Verify Your Company's SME Status -->
             <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
                 <div class="w-12 h-12 p-2 rounded-lg mb-4 flex items-center justify-center bg-gray-100">
-                    <img src="{% static 'images/icons/light.svg' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
+                    <img src="{% static 'images/icons/1.png' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Register and Verify Your Company's SME Status</h3>
                 <p class="text-base text-gray-600">A registration process is applied to verify the SME status of all companies that meet the SME criteria.</p>
@@ -139,7 +134,7 @@
             <!-- Card 2: Are you a SME ? -->
             <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
                 <div class="w-12 h-12 p-2 rounded-lg mb-4 flex items-center justify-center bg-gray-100">
-                    <img src="{% static 'images/icons/light.svg' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
+                    <img src="{% static 'images/icons/2.png' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Are you a SME ?</h3>
                 <p class="text-base text-gray-600">In response to economic changes since 2005—like inflation, structural shifts, and evolving business trends—Nepal revised its SME definition, officially endorsed at the 14th NSDC meeting in July 2013.</p>
@@ -148,7 +143,7 @@
             <!-- Card 3: Why SME Matters In Koshi Province? -->
             <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
                 <div class="w-12 h-12 p-2 rounded-lg mb-4 flex items-center justify-center bg-gray-100">
-                    <img src="{% static 'images/icons/light.svg' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
+                    <img src="{% static 'images/icons/4.png' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Why SME Matters In Koshi Province?</h3>
                 <p class="text-base text-gray-600">Over 90%+ of businesses in Nepal are MSMEs, driving economic growth and jobs. With 923K+ establishments (2018), many are based in Koshi Province, including key hubs like Birnagar and Itahari. SMEs contribute 22% to GDP and 70%+ of non-farm employment.</p>
@@ -157,7 +152,7 @@
             <!-- Card 4: Webinar & SME Development Programme -->
             <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
                 <div class="w-12 h-12 p-2 rounded-lg mb-4 flex items-center justify-center bg-gray-100">
-                    <img src="{% static 'images/icons/light.svg' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
+                    <img src="{% static 'images/icons/3.png' %}" alt="Icon" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Webinar & SME Development Programme</h3>
                 <p class="text-base text-gray-600">In 2022, 213 entrepreneurship and SME development programs were planned for Koshi Province by various ministries and implementing agencies to strengthen the local business ecosystem.</p>
@@ -176,7 +171,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                    <img src="https://via.placeholder.com/600x350?text=Event+Image+1" alt="Event Image" class="w-full h-48 object-cover">
+                    <img src="{% static 'images/newspics/news.png' %}" alt="Event Image" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <p class="text-sm text-gray-500 mb-2">08-11-2024 · Kathmandu</p>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">Government Launches SME Support Fund in Koshi</h3>
@@ -184,7 +179,7 @@
                     </div>
                 </div>
                 <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                    <img src="https://via.placeholder.com/600x350?text=Event+Image+2" alt="Event Image" class="w-full h-48 object-cover">
+                    <img src="{% static 'images/newspics/news1.png' %}" alt="Event Image" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <p class="text-sm text-gray-500 mb-2">08-11-2024 · Itahari</p>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">Digital Ecosystem for SMEs and BDSPs Goes Live</h3>
@@ -195,28 +190,28 @@
 
             <div class="lg:col-span-1 space-y-6">
                 <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="https://via.placeholder.com/100x60?text=News+Thumb" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
+                    <img src="{% static 'images/newspics/news1.png' %}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
                     <div>
                         <p class="text-xs text-gray-500 mb-1">08-11-2021 · News</p>
                         <h4 class="text-base font-semibold text-gray-900">Digital Marketing for Local Enterprises</h4>
                     </div>
                 </div>
                 <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="https://via.placeholder.com/100x60?text=News+Thumb" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
+                    <img src="{% static 'images/newspics/news1.png' %}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
                     <div>
                         <p class="text-xs text-gray-500 mb-1">08-11-2021 · News</p>
                         <h4 class="text-base font-semibold text-gray-900">Koshi Business Growth Summit 2023</h4>
                     </div>
                 </div>
                 <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="https://via.placeholder.com/100x60?text=News+Thumb" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
+                    <img src="{% static 'images/newspics/news1.png' %}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
                     <div>
                         <p class="text-xs text-gray-500 mb-1">08-11-2021 · News</p>
                         <h4 class="text-base font-semibold text-gray-900">Village did removed enjoyed explain nor ham saw.</h4>
                     </div>
                 </div>
                 <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="https://via.placeholder.com/100x60?text=Webinar+Thumb" alt="Webinar Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
+                    <img src="{% static 'images/newspics/news1.png' %}" alt="Webinar Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
                     <div>
                         <p class="text-xs text-gray-500 mb-1">08-11-2021 · Webinar</p>
                         <h4 class="text-base font-semibold text-gray-900">Unlocking Finance for SMEs</h4>
