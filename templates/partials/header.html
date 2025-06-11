@@ -1,0 +1,22 @@
+{% load static %}
+
+<header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <img src="{% static 'images/logos/main_logo.png' %}"  alt="Logo 1" class="h-6">
+            <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="h-6">
+            <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#" class="hover:text-blue-600">Home</a>
+                <a href="#" class="hover:text-blue-600">About</a>
+                <a href="#" class="hover:text-blue-600">Schemes</a>
+                <a href="#" class="hover:text-blue-600">Policies</a>
+                <a href="#" class="hover:text-blue-600">Contact</a>
+            </nav>
+        </div>
+        <div class="space-x-2">
+            <button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">Register</button>
+            <button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">login</button>
+            
+        </div>
+    </div>
+</header>
