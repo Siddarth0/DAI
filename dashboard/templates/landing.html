@@ -14,36 +14,50 @@
     </div>
 </section>
 
-<section class="relative bg-gray-50 px-6 pt-16 pb-32 overflow-hidden">
-    <div class="max-w-6xl mx-auto relative z-10">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
-            <div class="text-center md:text-left mb-6 md:mb-0">
-               <h2 class="text-2xl font-bold mb-2">SME Development Steps</h2>
-               <p class="text-gray-600">A step-by-step path designed to guide you through your business journey.</p>
-            </div>
-        <button class="mt-4 md:mt-0 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 text-lg shadow-md">Get Started</button>
-    </div>
+    <!-- SME Development Steps Section -->
+<section class="bg-gray-50 py-16 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-start lg:space-x-12"> {# Parent flex container for columns #}
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center pt-8">
-        <div class="relative z-10 p-4">
-            <img src="/static/icons/start.png" alt="" class="mx-auto h-10 mb-4">
-            <h3 class="font-semibold mb-2">Starting a Business</h3>
-            <p class="text-sm text-gray-600">Register your business, get legal approvals, and access initial support.</p>
+        <div class="lg:w-1/3 mb-10 lg:mb-0"> {# This div acts as the left column #}
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">SME Development Steps</h2>
+            <p class="text-lg text-gray-600 mb-6">A step-by-step path designed to guide you through your business journey.</p>
+            <button class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">Get Started</button>
         </div>
-        <div class="relative z-10 p-4">
-            <img src="/static/icons/manage.png" alt="" class="mx-auto h-10 mb-4">
-            <h3 class="font-semibold mb-2">Managing a Business</h3>
-            <p class="text-sm text-gray-600">Handle operations, maintain records, file taxes, and stay compliant.</p>
-        </div>
-        <div class="relative z-10 p-4">
-            <img src="/static/icons/grow.png" alt="" class="mx-auto h-10 mb-4">
-            <h3 class="font-semibold mb-2">Growing a Business</h3>
-            <p class="text-sm text-gray-600">Access finance, training, and support to expand your impact.</p>
-        </div>
-        <div class="relative z-10 p-4">
-            <img src="/static/icons/sustain.png" alt="" class="mx-auto h-10 mb-4">
-            <h3 class="font-semibold mb-2">Sustaining a Business</h3>
-            <p class="text-sm text-gray-600">Improve efficiency, stay competitive, and build resilience.</p>
+
+        {# Changed height to allow more vertical space for the curve to display correctly #}
+        <div class="realtive max-w-6xl mx-auto h-[550px] mt-16 lg:mt-0"> 
+            {# REMOVED preserveAspectRatio="none" to ensure the curve maintains its correct shape #}
+            <svg class="absolute top-0 left-0 w-full h-full z-0" viewBox="3 -48 1388 829">
+                <path d="M -2 505 C 175 677 368 505 483 421 S 881 458 984 304 S 1057 -48 1391 4"
+                      fill="none"
+                      stroke="#ff7f50" {# Orange color for the line #}
+                      stroke-width="4" />
+            </svg>
+
+            {# RE-ADJUST THESE 'left' AND 'top' PERCENTAGES TO ALIGN WITH THE NEW CURVE SHAPE #}
+            <div class="absolute flex flex-col items-center text-center z-10" style="left: 20%; top: 85%; transform: translate(-50%, -50%);">
+                <img src="{% static 'images/icons/start.png' %}" alt="Start Icon" class="h-16 w-16 mb-2">
+                <h3 class="font-semibold text-gray-900 mb-1">Starting a Business</h3>
+                <p class="text-sm text-gray-700 max-w-[150px]">Register your business, get legal approvals, and access initial support to begin your journey.</p>
+            </div>
+
+            <div class="absolute flex flex-col items-center text-center z-10" style="left: 42%; top: 65%; transform: translate(-50%, -50%);">
+                <img src="{% static 'images/icons/manage.png' %}" alt="Manage Icon" class="h-16 w-16 mb-2">
+                <h3 class="font-semibold text-gray-900 mb-1">Managing a Business</h3>
+                <p class="text-sm text-gray-700 max-w-[150px]">Handle operations, maintain records, file taxes, and stay compliant with government rules.</p>
+            </div>
+
+            <div class="absolute flex flex-col items-center text-center z-10" style="left: 65%; top: 55%; transform: translate(-50%, -50%);">
+                <img src="{% static 'images/icons/grow.png' %}" alt="Grow Icon" class="h-16 w-16 mb-2">
+                <h3 class="font-semibold text-gray-900 mb-1">Growing a Business</h3>
+                <p class="text-sm text-gray-700 max-w-[150px]">Access finance, training, and support to expand your team, market, and impact.</p>
+            </div>
+
+            <div class="absolute flex flex-col items-center text-center z-10" style="right: 20%; top: 15%; transform: translate(50%, -50%);">
+                <img src="{% static 'images/icons/sustain.png' %}" alt="Sustain Icon" class="h-16 w-16 mb-2">
+                <h3 class="font-semibold text-gray-900 mb-1">Sustaining a Business</h3>
+                <p class="text-sm text-gray-700 max-w-[150px]">Improve efficiency, stay competitive, and build long-term resilience.</p>
+            </div>
         </div>
     </div>
     <div class="absolute bottom-0 left-0 w-full h-24" style="pointer-events: none;">
