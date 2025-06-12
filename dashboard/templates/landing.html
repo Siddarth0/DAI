@@ -2,16 +2,70 @@
 {% load static %}
 {% block content %}
 <section class="text-center py-20 px-6 bg-white">
-    <h1 class="font-satoshi font-medium text-[50px] text-[#0F1324] mb-4">
-      Empowering Small & Medium Enterprises<br>in Koshi Province
-    </h1>
-    <p class="text-gray-600 max-w-xl mx-auto mb-6">
-        Access business development resources, apply for government support schemes, and grow your enterprise.
-    </p>
-    <div class="space-x-4">
-        <button class="bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800">Register Now</button>
-        <button class="border border-black px-5 py-2 rounded-md hover:bg-gray-100">Learn More</button>
-    </div>
+    <div class="swiper mySwiper"> {# This div will be the Swiper container #}
+    <div class="swiper-wrapper"> {# This div holds all your individual slides #}
+
+        <section class="swiper-slide text-center py-20 px-6 bg-white">
+            <h1 class="font-satoshi font-medium text-[50px] text-[#0F1324] mb-4">
+                Empowering Small & Medium Enterprises<br>in Koshi Province
+            </h1>
+            <p class="text-gray-600 max-w-xl mx-auto mb-6">
+                Access business development resources, apply for government support schemes, and grow your enterprise.
+            </p>
+            <div class="space-x-4">
+                <button class="bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800">Register Now</button>
+                <button class="border border-black px-5 py-2 rounded-md hover:bg-gray-100">Learn More</button>
+            </div>
+        </section>
+
+        <section class="swiper-slide text-center py-20 px-6 bg-blue-50">
+            <h1 class="font-satoshi font-medium text-[50px] text-blue-800 mb-4">
+                Discover New Opportunities<br>and Resources
+            </h1>
+            <p class="text-gray-700 max-w-xl mx-auto mb-6">
+                Explore a wide range of services, funding options, and expert guidance tailored for your business.
+            </p>
+            <div class="space-x-4">
+                <button class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700">Explore Services</button>
+                <button class="border border-blue-600 text-blue-600 px-5 py-2 rounded-md hover:bg-blue-100">Contact Us</button>
+            </div>
+        </section>
+
+        <section class="swiper-slide text-center py-20 px-6 bg-white">
+            <h1 class="font-satoshi font-medium text-[50px] text-[#0F1324] mb-4">
+                Empowering Small & Medium Enterprises<br>in Koshi Province
+            </h1>
+            <p class="text-gray-600 max-w-xl mx-auto mb-6">
+                Access business development resources, apply for government support schemes, and grow your enterprise.
+            </p>
+            <div class="space-x-4">
+                <button class="bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800">Register Now</button>
+                <button class="border border-black px-5 py-2 rounded-md hover:bg-gray-100">Learn More</button>
+            </div>
+        </section>
+
+        <section class="swiper-slide text-center py-20 px-6 bg-blue-50">
+            <h1 class="font-satoshi font-medium text-[50px] text-blue-800 mb-4">
+                Discover New Opportunities<br>and Resources
+            </h1>
+            <p class="text-gray-700 max-w-xl mx-auto mb-6">
+                Explore a wide range of services, funding options, and expert guidance tailored for your business.
+            </p>
+            <div class="space-x-4">
+                <button class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700">Explore Services</button>
+                <button class="border border-blue-600 text-blue-600 px-5 py-2 rounded-md hover:bg-blue-100">Contact Us</button>
+            </div>
+        </section>
+
+        </div>
+
+    <div class="swiper-pagination"></div>
+
+    <div class="swiper-button-prev text-gray-300 hover:text-gray-800 transition-colors duration-300"></div>
+    <div class="swiper-button-next text-gray-300 hover:text-gray-800 transition-colors duration-300"></div>
+
+
+</div>
 </section>
 
     <!-- SME Development Steps Section -->
@@ -25,7 +79,7 @@
         </div>
 
         {# Changed height to allow more vertical space for the curve to display correctly #}
-        <div class="realtive max-w-6xl mx-auto h-[550px] mt-16 lg:mt-0"> 
+        <div class="realtive max-w-6xl mx-auto h-auto md:h-[550px] mt-16 lg:mt-0"> 
             {# REMOVED preserveAspectRatio="none" to ensure the curve maintains its correct shape #}
             <svg class="absolute top-0 left-0 w-full h-full z-0" viewBox="3 -48 1388 829">
                 <path d="M -2 505 C 175 677 368 505 483 421 S 881 458 984 304 S 1057 -48 1391 4"
