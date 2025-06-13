@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from datetime import date
-from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent
+from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo
 
 def landing_page(request):
     navbar_content = NavBar.objects.first()
@@ -15,6 +15,8 @@ def landing_page(request):
     today = date.today()
     events = NewsEvent.objects.filter(start_date__lte=today, end_date__gte=today).order_by('-start_date')
 
+    contact_infos = ContactInfo.objects.all()
+
 
 
     context = {
@@ -25,5 +27,6 @@ def landing_page(request):
         'guidelines': guidelines,
         'news_events': events,
         'today': today,
+        'contact_infos': contact_infos,
     }
     return render(request, "landing.html", context)

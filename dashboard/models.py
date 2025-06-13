@@ -87,3 +87,17 @@ class NewsEvent(models.Model):
     
     def __str__(self):
         return self.title
+    
+
+class ContactInfo(models.Model):
+    type_choices = [
+        ('email', 'Email'),
+        ('phone', 'Phone'),
+        ('location', 'Location'),
+    ]
+
+    contact_type = models.CharField(max_length=10, choices=type_choices)
+    value = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.get_contact_type_display()}: {self.value}"

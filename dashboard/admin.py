@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent
+from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo
 
 @admin.register(NavBar)
 class NavBarAdmin(admin.ModelAdmin):
@@ -35,3 +35,8 @@ class NewsEventAdmin(admin.ModelAdmin):
     ordering = ('-start_date',)
 
     exclude = ('created_at', 'updated_at')
+
+
+@admin.register(ContactInfo)
+class ContactInfoAdmin(admin.ModelAdmin):
+    list_display = ('contact_type', 'value')

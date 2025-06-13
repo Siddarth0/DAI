@@ -27,23 +27,23 @@
     </div>
 
    
-    <div>
-      <h4 class="font-semibold mb-3">Contact us</h4>
-      <ul class="space-y-2 text-gray-600">
-        <li class="flex items-center space-x-2">
+<div>
+  <h4 class="font-semibold mb-3">Contact us</h4>
+  <ul class="space-y-2 text-gray-600">
+    {% for contact in contact_infos %}
+      <li class="flex items-center space-x-2">
+        {% if contact.contact_type == 'email' %}
           <img src="{% static 'images/icons/contact.svg' %}" class="w-4 h-4 text-[#0F1324]" alt="Email Icon">
-          <span>contact@company.com</span>
-        </li>
-        <li class="flex items-center space-x-2">
+        {% elif contact.contact_type == 'phone' %}
           <img src="{% static 'images/icons/phone.svg' %}" class="w-4 h-4 text-[#0F1324]" alt="Phone Icon">
-          <span>(977) 9807890435</span>
-        </li>
-        <li class="flex items-center space-x-2">
+        {% elif contact.contact_type == 'location' %}
           <img src="{% static 'images/icons/location.svg' %}" class="w-4 h-4 text-[#0F1324]" alt="Location Icon">
-          <span>Kathmandu, Nepal</span>
-        </li>
-      </ul>
-    </div>
+        {% endif %}
+        <span>{{ contact.value }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 
     <!-- Far Right - Logos -->
     <div class="space-y-4">
