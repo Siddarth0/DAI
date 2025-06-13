@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils import timezone
+import datetime
 
 class NavBar(models.Model):
     home_link = models.CharField(max_length=50, default='Home')
@@ -72,4 +73,17 @@ class Guidelines(models.Model):
     def __str__(self):
         return self.title
 
+
+class NewsEvent(models.Model):
+    title = models.CharField(max_length = 255)
+    content = models.TextField()
+    location = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to='static/images/newspics/')
+    is_webinar = models.BooleanField(default=False)
+    start_date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(default=datetime.date.today)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
+    def __str__(self):
+        return self.title

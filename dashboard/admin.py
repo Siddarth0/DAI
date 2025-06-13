@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NavBar, Banner, SMEStep, Service, Guidelines
+from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent
 
 @admin.register(NavBar)
 class NavBarAdmin(admin.ModelAdmin):
@@ -27,3 +27,11 @@ class ServiceAdmin(admin.ModelAdmin):
 class Guidelines(admin.ModelAdmin):
     list_display = ('icon','title','description','order')
     ordering = ('order',)
+
+@admin.register(NewsEvent)
+class NewsEventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_webinar', 'start_date', 'end_date')
+    list_filter = ('is_webinar', 'start_date', 'end_date', 'created_at')
+    ordering = ('-start_date',)
+
+    exclude = ('created_at', 'updated_at')

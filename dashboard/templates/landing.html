@@ -142,62 +142,61 @@
     </div>
 </section>
 
+<!--NEws amd Events-->
 <section class="bg-gray-50 py-16 px-6">
     <div class="max-w-7xl mx-auto">
+        <!-- Header -->
         <div class="flex justify-between items-center mb-10">
             <h2 class="text-4xl font-bold text-gray-900">Our News & Events</h2>
-            <a href="#" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition duration-300 text-lg shadow-md">See All Events Posts</a>
+            <a href="#" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition duration-300 text-lg shadow-md">
+                See All Events Posts
+            </a>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 rounded-xl  gap-8">
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Big News Cards (2) -->
             <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                    <img src="{% static 'images/newspics/news.png' %}" alt="Event Image" class="w-full rounded-lg h-48 object-cover">
+                {% for event in news_events|slice:":2" %}
+                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden relative">
+                    <img src="{{ event.image.url }}" alt="Event Image" class="w-full h-48 object-cover rounded-t-xl">
                     <div class="p-6">
-                        <p class="text-sm text-gray-500 mb-2">08-11-2024 · Kathmandu</p>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Government Launches SME Support Fund in Koshi</h3>
-                        <p class="text-base text-gray-700">A new initiative to improve financing access for local enterprises. Six curiosity day assurance bed necessary.</p>
+                        <p class="text-sm text-gray-500 mb-1">
+                            {{ event.start_date|date:"M d, Y" }} - {{ event.location }}
+                        </p>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ event.title }}</h3>
+                        <p class="text-base text-gray-700">{{ event.content|truncatewords:20 }}</p>
                     </div>
+
+                    <!-- Tag -->
+                    {% if event.is_webinar and event.start_date > today %}
+                        <span class="absolute top-4 right-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded">Coming Soon</span>
+                    {% elif event.is_webinar %}
+                        <span class="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">Webinar</span>
+                    {% else %}
+                        <span class="absolute top-4 right-4 bg-blue-600 text-white text-xs px-2 py-1 rounded">News</span>
+                    {% endif %}
                 </div>
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                    <img src="{% static 'images/newspics/news1.png' %}" alt="Event Image" class="w-full h-48 object-cover rounded-lg">
-                    <div class="p-6">
-                        <p class="text-sm text-gray-500 mb-2">08-11-2024 · Itahari</p>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Digital Ecosystem for SMEs and BDSPs Goes Live</h3>
-                        <p class="text-base text-gray-700">A province-wide platform empowering small businesses through technology. And partially estimating terminated day everything.</p>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
+            <!-- Small News Cards -->
             <div class="lg:col-span-1 space-y-6">
-                <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="{% static 'images/newspics/news1.png' %}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
+                {% for event in news_events|slice:"2:" %}
+                <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4 relative">
+                    <img src="{{ event.image.url }}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
                     <div>
-                        <p class="text-xs text-gray-500 mb-1">08-11-2021 · News</p>
-                        <h4 class="text-base font-semibold text-gray-900">Digital Marketing for Local Enterprises</h4>
+                        <p class="text-xs text-gray-500 mb-1">
+                            {{ event.start_date|date:"M d, Y" }} · {{ event.is_webinar|yesno:"Webinar,News" }}
+                        </p>
+                        <h4 class="text-base font-semibold text-gray-900">{{ event.title|truncatewords:8 }}</h4>
                     </div>
+
+                    {% if event.is_webinar and event.start_date > today %}
+                        <span class="absolute top-2 right-2 bg-yellow-500 text-white text-[10px] px-1.5 py-0.5 rounded">Coming Soon</span>
+                    {% endif %}
                 </div>
-                <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="{% static 'images/newspics/news1.png' %}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
-                    <div>
-                        <p class="text-xs text-gray-500 mb-1">08-11-2021 · News</p>
-                        <h4 class="text-base font-semibold text-gray-900">Koshi Business Growth Summit 2023</h4>
-                    </div>
-                </div>
-                <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="{% static 'images/newspics/news1.png' %}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
-                    <div>
-                        <p class="text-xs text-gray-500 mb-1">08-11-2021 · News</p>
-                        <h4 class="text-base font-semibold text-gray-900">Village did removed enjoyed explain nor ham saw.</h4>
-                    </div>
-                </div>
-                <div class="flex items-center bg-white rounded-xl shadow-md border border-gray-100 p-4">
-                    <img src="{% static 'images/newspics/news1.png' %}" alt="Webinar Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
-                    <div>
-                        <p class="text-xs text-gray-500 mb-1">08-11-2021 · Webinar</p>
-                        <h4 class="text-base font-semibold text-gray-900">Unlocking Finance for SMEs</h4>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
