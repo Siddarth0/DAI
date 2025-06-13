@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
             disableOnInteraction: false, // Continue autoplay after user interaction
         },
 
+        effect: 'fade', // Optional: Add a fade effect between slides
+                fadeEffect: {
+                    crossFade: true,
+                },
+
         // Add any other Swiper options here
     });
 });
