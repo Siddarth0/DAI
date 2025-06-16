@@ -3,16 +3,11 @@ from django.utils import timezone
 import datetime
 
 class NavBar(models.Model):
-    home_link = models.CharField(max_length=50, default='Home')
-    about_link = models.CharField(max_length=100, default='About')
-    schemes_link = models.CharField(max_length=50, default='Schemes')
-    policies_link = models.CharField(max_length=50, default='Policies')
-    contact_link = models.CharField(max_length=50, default='Contact')
-    navbar_register = models.CharField(max_length=50, default='Register')
-    navbar_login = models.CharField(max_length=50, default='Login')
+    name = models.CharField(max_length=50)
+    url = models.URLField()
 
     def __str__(self):
-        return "Nav Bar Content"
+        return self.name
 
 class Banner(models.Model):
     title = models.CharField(max_length=255)
@@ -101,3 +96,18 @@ class ContactInfo(models.Model):
 
     def __str__(self):
         return f"{self.get_contact_type_display()}: {self.value}"
+    
+
+class Quicklinks(models.Model):
+    name = models.CharField(max_length=100)
+    url = models.URLField()
+
+    def __str__(self):
+        return self.name
+
+class SocialLinks(models.Model):
+    icon = models.FileField(upload_to='static/images/icons/')
+    url= models.URLField()
+
+    def __str__(self):
+        return "SocialLinks"

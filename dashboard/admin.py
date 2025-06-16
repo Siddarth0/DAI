@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo
+from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks
 
 @admin.register(NavBar)
 class NavBarAdmin(admin.ModelAdmin):
-    fields = ('home_link', 'about_link', 'schemes_link', 'policies_link', 'contact_link', 'navbar_register', 'navbar_login')
+    list_display=('name', 'url')
 
     
 @admin.register(Banner)
@@ -40,3 +40,12 @@ class NewsEventAdmin(admin.ModelAdmin):
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ('contact_type', 'value')
+
+@admin.register(Quicklinks)
+class QuicklinksAdmin(admin.ModelAdmin):
+    list_display = ('name', 'url')
+
+
+@admin.register(SocialLinks)
+class SocialLinksAdmin(admin.ModelAdmin):
+    list_display = ('icon', 'url')

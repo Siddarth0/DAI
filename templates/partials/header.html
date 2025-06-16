@@ -2,21 +2,24 @@
 
 <header class="bg-white shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-            <img src="{% static 'images/logos/main_logo.png' %}"  alt="Logo 1" class="h-6">
-            <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="h-6">
+        <div class="flex items-center">
+            <img src="{% static 'images/logos/main_logo.png' %}"  alt="Logo 1" class="h-6 mr-4 ">
+            <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="h-6 mr-8">
             <nav class="hidden md:flex space-x-6 text-sm font-medium">
-                <a href="#" class="ml-6 hover:text-blue-600"> {{ navbar_content.home_link|default:"Home" }} </a>
-                <a href="#" class="hover:text-blue-600"> {{ navbar_content.about_link|default:"About" }} </a>
-                <a href="#" class="hover:text-blue-600"> {{ navbar_content.schemes_link|default:"Schemes" }} </a>
-                <a href="#" class="hover:text-blue-600"> {{ navbar_content.policies_link|default:"Policies" }} </a>
-                <a href="#" class="hover:text-blue-600"> {{ navbar_content.contact_link|default:"Contact" }} </a>
+               {% for content in navbar_content %}
+                  <a href="{{ content.url }}" class="hover:text-blue-600 transition duration-200">
+                 {{ content.name }}
+                  </a>
+               {% endfor %}
             </nav>
         </div>
-        <div class="space-x-2">
-            <button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">{{ navbar_content.navbar_register|default:"Register" }}</button>
-            <button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">{{ navbar_content.navbar_login|default:"Login" }}</button>
-            
-        </div>
+    <div class="space-x-2">
+      <a href="#">
+        <button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">Register</button>
+      </a>
+      <a href="#">
+        <button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">Login</button>
+      </a>
+    </div>
     </div>
 </header>

@@ -16,15 +16,18 @@
     </div>
 
    
-    <div>
-      <h4 class="font-semibold mb-3">Quick Links</h4>
-      <ul class="space-y-2 text-gray-600">
-        <li><a href="#" class="hover:text-[#0F1324]">Events & Trainings</a></li>
-        <li><a href="#" class="hover:text-[#0F1324]">Governance & Policy</a></li>
-        <li><a href="#" class="hover:text-[#0F1324]">Contact</a></li>
-        <li><a href="#" class="hover:text-[#0F1324]">FAQs</a></li>
-      </ul>
-    </div>
+<div>
+  <h4 class="font-semibold mb-3">Quick Links</h4>
+  <ul class="space-y-2 text-gray-600">
+    {% for link in quick_links %}
+      <li>
+        <a href="{{ link.url }}" class="hover:text-blue-600 transition duration-200">
+          {{ link.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 
    
 <div>
@@ -60,11 +63,13 @@
 
   <!-- Bottom Row -->
   <div class="border-t border-gray-200 py-4 flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 lg:px-8">
-    <p class="text-xs text-gray-500">2025 © DAI All Rights Reserved</p>
-    <div class="flex space-x-4 mt-2 md:mt-0">
-      <a href="#"><i class="fab fa-twitter text-gray-500 hover:text-[#0F1324]"></i></a>
-      <a href="#"><i class="fab fa-instagram text-gray-500 hover:text-[#0F1324]"></i></a>
-      <a href="#"><i class="fab fa-facebook text-gray-500 hover:text-[#0F1324]"></i></a>
+    <p class="text-xs text-gray-500 mt-2 md:mt-0 md:ml-4">2025 © DAI All Rights Reserved</p>
+    <div class="flex space-x-4">
+      {% for social in social_links %}
+        <a href = "{{social.url }}"  target = "_blank">
+          <img src = "{{social.icon.url }}" alt ="Social Icon" class="w-5 h-5 hover:opacity-80 transition">
+        </a>
+      {% endfor %}
     </div>
   </div>
 </footer>

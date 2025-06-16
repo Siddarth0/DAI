@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from datetime import date
-from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo
+from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks
 
 def landing_page(request):
-    navbar_content = NavBar.objects.first()
+    navbar_content = NavBar.objects.all()
+
     banners = Banner.objects.all().order_by("order")
 
     steps = SMEStep.objects.all()[:4]
@@ -17,6 +18,10 @@ def landing_page(request):
 
     contact_infos = ContactInfo.objects.all()
 
+    quick_links = Quicklinks.objects.all()
+
+    social_links = SocialLinks.objects.all
+
 
 
     context = {
@@ -28,5 +33,7 @@ def landing_page(request):
         'news_events': events,
         'today': today,
         'contact_infos': contact_infos,
+        'quick_links': quick_links,
+        'social_links': social_links,
     }
     return render(request, "landing.html", context)
