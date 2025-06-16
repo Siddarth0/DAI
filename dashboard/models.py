@@ -4,7 +4,7 @@ import datetime
 
 class NavBar(models.Model):
     name = models.CharField(max_length=50)
-    url = models.URLField()
+    url = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -111,3 +111,19 @@ class SocialLinks(models.Model):
 
     def __str__(self):
         return "SocialLinks"
+    
+class Notice(models.Model):
+    title = models.CharField(max_length = 255)
+    content = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='static/notices/', blank=True, null=True)
+    pdf = models.FileField(upload_to='static/notices',blank=True, null=True)
+    is_popup = models.BooleanField(default=False, help_text="Check to show this notice as a pop up")
+    popup_order = models.PositiveIntegerField(blank = True, null=True, help_text="order of popup display if multiple") 
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['popup_order', '-created_at']
+    

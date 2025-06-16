@@ -1,73 +1,75 @@
-{%load static%}
+{% load static %}
 
 <footer class="bg-white border-t border-gray-200 text-[#0F1324] text-sm font-satoshi">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
-    
-    <div class="space-y-3">
-      <div class="flex items-center space-x-2">
-        <img src="{% static 'images/logos/main_logo.png' %}" alt="DAI" class="h-6" />
-        <span class="font-semibold text-base">Digital Information Portal</span>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
+
+    <!-- About Section -->
+    <div class="md:col-span-2 space-y-3 max-w-md mt-6 ml-0 md:ml-[-28px]">
+      <div class="flex items-center space-x-3">
+        <img src="{% static 'images/logos/main_logo.png' %}" alt="DAI" class=" w-16 h-8" />
+        <span class="font-semibold text-xl text-gray-600">Digital Information Portal</span>
       </div>
-      <p class="text-gray-600 text-sm">
+      <p class="text-gray-600 text-sm leading-relaxed">
         This portal serves as a one-stop platform for SMEs and BDSPs in Nepal—
         connecting opportunities, resources, and insights to drive sustainable
         business growth and innovation across all provinces.
       </p>
     </div>
 
-   
-<div>
-  <h4 class="font-semibold mb-3">Quick Links</h4>
-  <ul class="space-y-2 text-gray-600">
-    {% for link in quick_links %}
-      <li>
-        <a href="{{ link.url }}" class="hover:text-blue-600 transition duration-200">
-          {{ link.name }}
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-</div>
+    <!-- Quick Links -->  
+    <div class="md:col-span-1">
+      <h4 class="font-semibold mb-3">Quick Links</h4>
+      <ul class="space-y-2 text-gray-600">
+        {% for link in quick_links %}
+          <li>
+            <a href="{{ link.url }}" class="hover:text-blue-600 transition duration-200">
+              {{ link.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
 
-   
-<div>
-  <h4 class="font-semibold mb-3">Contact us</h4>
-  <ul class="space-y-2 text-gray-600">
-    {% for contact in contact_infos %}
-      <li class="flex items-center space-x-2">
-        {% if contact.contact_type == 'email' %}
-          <img src="{% static 'images/icons/contact.svg' %}" class="w-4 h-4 text-[#0F1324]" alt="Email Icon">
-        {% elif contact.contact_type == 'phone' %}
-          <img src="{% static 'images/icons/phone.svg' %}" class="w-4 h-4 text-[#0F1324]" alt="Phone Icon">
-        {% elif contact.contact_type == 'location' %}
-          <img src="{% static 'images/icons/location.svg' %}" class="w-4 h-4 text-[#0F1324]" alt="Location Icon">
-        {% endif %}
-        <span>{{ contact.value }}</span>
-      </li>
-    {% endfor %}
-  </ul>
-</div>
+    <!-- Contact Us -->
+    <div class="md:col-span-1">
+      <h4 class="font-semibold mb-3">Contact Us</h4>
+      <ul class="space-y-2 text-gray-600">
+        {% for contact in contact_infos %}
+          <li class="flex items-center space-x-2">
+            {% if contact.contact_type == 'email' %}
+              <img src="{% static 'images/icons/contact.svg' %}" class="w-4 h-4" alt="Email Icon">
+            {% elif contact.contact_type == 'phone' %}
+              <img src="{% static 'images/icons/phone.svg' %}" class="w-4 h-4" alt="Phone Icon">
+            {% elif contact.contact_type == 'location' %}
+              <img src="{% static 'images/icons/location.svg' %}" class="w-4 h-4" alt="Location Icon">
+            {% endif %}
+            <span>{{ contact.value }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
 
-    <!-- Far Right - Logos -->
-    <div class="space-y-4">
+    <!-- Logos -->
+    <div class="md:col-span-1 space-y-4">
       <div>
         <p class="text-xs text-gray-400 mb-1">Supported By:</p>
-        <img src="{% static 'images/logos/main_logo.png' %}" alt="DAI Logo" class="h-6" />
+        <img src="{% static 'images/logos/main_logo.png' %}" alt="DAI Logo" class="w-[81px] h-[40px]" />
       </div>
       <div>
         <p class="text-xs text-gray-400 mb-1">Developed by</p>
-        <img src="{% static 'images/logos/young_minds.png' %}" alt="Developer" class="h-6" />
+        <img src="{% static 'images/logos/young_minds.png' %}" alt="Developer" class="w-[74.15px] h-[32px]" />
       </div>
     </div>
+
   </div>
 
-  <!-- Bottom Row -->
-  <div class="border-t border-gray-200 py-4 flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 lg:px-8">
-    <p class="text-xs text-gray-500 mt-2 md:mt-0 md:ml-4">2025 © DAI All Rights Reserved</p>
-    <div class="flex space-x-4">
+  <!-- Bottom Footer Row -->
+  <div class="border-t border-gray-200 py-4 flex flex-col md:flex-row items-center justify-between px-4" style = "width: 1300px; margin: 0 auto;">
+    <p class="text-xs text-gray-500 mt-2 md:mt-0">2025 © DAI All Rights Reserved</p>
+    <div class="flex space-x-4 mt-2 md:mt-0 ">
       {% for social in social_links %}
-        <a href = "{{social.url }}"  target = "_blank">
-          <img src = "{{social.icon.url }}" alt ="Social Icon" class="w-5 h-5 hover:opacity-80 transition">
+        <a href="{{ social.url }}" target="_blank">
+          <img src="{{ social.icon.url }}" alt="Social Icon" class="w-5 h-5 hover:opacity-80 transition" />
         </a>
       {% endfor %}
     </div>

@@ -2,10 +2,10 @@
 
 <header class="bg-white shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <div class="flex items-center">
-            <img src="{% static 'images/logos/main_logo.png' %}"  alt="Logo 1" class="h-6 mr-4 ">
-            <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="h-6 mr-8">
-            <nav class="hidden md:flex space-x-6 text-sm font-medium">
+        <div class="flex items-center ml-[-20px]">
+            <img src="{% static 'images/logos/main_logo.png' %}"  alt="Logo 1" class="w-[65px] h-[32px] mr-4 ">
+            <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="w-[28px] h-[24px] mr-4">
+            <nav class="hidden md:flex space-x-6 text-sm font-medium ml-6">
                {% for content in navbar_content %}
                   <a href="{{ content.url }}" class="hover:text-blue-600 transition duration-200">
                  {{ content.name }}

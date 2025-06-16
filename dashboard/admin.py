@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks
+from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks, Notice
 
 @admin.register(NavBar)
 class NavBarAdmin(admin.ModelAdmin):
@@ -34,7 +34,7 @@ class NewsEventAdmin(admin.ModelAdmin):
     list_filter = ('is_webinar', 'start_date', 'end_date', 'created_at')
     ordering = ('-start_date',)
 
-    exclude = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(ContactInfo)
@@ -49,3 +49,10 @@ class QuicklinksAdmin(admin.ModelAdmin):
 @admin.register(SocialLinks)
 class SocialLinksAdmin(admin.ModelAdmin):
     list_display = ('icon', 'url')
+
+
+@admin.register(Notice)
+class NoticeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'image','pdf','is_popup', 'popup_order','created_at')
+    list_editable = ('is_popup', 'popup_order')
+    ordering = ('popup_order','-created_at',)
