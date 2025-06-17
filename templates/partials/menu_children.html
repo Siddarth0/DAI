@@ -1,7 +1,9 @@
-<ul>
+<ul class="ml-4 hidden group-hover:block">
   {% for child in children %}
-    <li>
-      <a href="{{ child.get_absolute_url }}">{{ child.name }}</a>
+    <li class="relative group mt-1">
+      <a href="{{ child.get_absolute_url }}" class="text-sm block px-2 py-1 hover:bg-gray-100">
+        {{ child.name }}
+      </a>
 
       {% if child.children.exists %}
         {% include 'partials/menu_children.html' with children=child.children.all %}

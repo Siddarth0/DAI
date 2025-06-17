@@ -18,9 +18,7 @@
               </a>
 
               {% if item.children.exists %}
-                <ul class="absolute left-0 top-full w-48 bg-white border rounded shadow-md invisible opacity-0 group-hover:visible group-hover:opacity-100 transition duration-300">
                   {% include 'partials/menu_children.html' with children=item.children.all %}
-                </ul>
               {% endif %}
             </li>
           {% endfor %}
