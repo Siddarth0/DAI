@@ -208,49 +208,49 @@
 </section>
 
 
-<div id="popup-container" class="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
+
+<div id="popup-container" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none transition-opacity duration-300">
   {% for notice in popup_notices %}
     <div
       id="popup-{{ forloop.counter0 }}"
       tabindex="-1"
-      class="bg-white rounded-lg shadow-lg w-full mx-4 p-6 relative overflow-auto pointer-events-none opacity-0 transition-opacity duration-300
-             {% if notice.pdf %} max-w-5xl max-h-[90vh] {% else %} max-w-xl max-h-[80vh] {% endif %}"
+      class="relative bg-white rounded-xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0 max-h-[90vh] w-full overflow-auto 
+            {% if notice.pdf %} max-w-5xl {% else %} max-w-xl {% endif %} mx-4"
       role="dialog" aria-modal="true" aria-labelledby="popup-title-{{ forloop.counter }}">
-
-      <!-- Title -->
-      <h3 id="popup-title-{{ forloop.counter }}" class="text-2xl font-semibold mb-4">{{ notice.title }}</h3>
-
-      <!-- Content -->
-      <div class="mb-4 text-gray-700 whitespace-pre-wrap">
-        {{ notice.content|linebreaks }}
-      </div>
-
-      <!-- Image Preview -->
-      {% if notice.image %}
-        <img src="{{ notice.image.url }}"
-             alt="Image preview for {{ notice.title }}"
-             class="mb-4 max-h-96 w-auto mx-auto object-contain rounded border border-gray-300" />
-      {% endif %}
-
-      <!-- PDF Preview -->
-      {% if notice.pdf %}
-        <iframe
-          src="{{ notice.pdf.url }}"
-          width="100%"
-          height="600"
-          class="mb-4 rounded border border-gray-300"
-          title="PDF preview for {{ notice.title }}">
-        </iframe>
-      {% endif %}
 
       <!-- Close Button -->
       <button
         onclick="closePopup({{ forloop.counter0 }})"
-        class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-3xl leading-none"
-        aria-label="Close popup">&times;</button>
+        class="absolute top-4 right-4 text-gray-700 hover:text-white p-2 rounded-full shadow transitionduration-200"
+        aria-label="Close popup">
+        <img src="{% static 'images/icons/close.svg' %}" alt="Close" class="h-5 w-5">
+      </button>
+
+      <!-- Inner Content -->
+      <div class="p-6">
+        <h3 id="popup-title-{{ forloop.counter }}" class="text-2xl font-bold mb-4 text-gray-800">{{ notice.title }}</h3>
+
+        <div class="mb-4 text-gray-700 whitespace-pre-wrap">
+          {{ notice.content|linebreaks }}
+        </div>
+
+        {% if notice.image %}
+          <img src="{{ notice.image.url }}" alt="Image preview for {{ notice.title }}"
+               class="mb-4 max-h-96 w-auto mx-auto object-contain rounded border border-gray-300 shadow-sm" />
+        {% endif %}
+
+        {% if notice.pdf %}
+          <iframe src="{{ notice.pdf.url }}"
+                  width="100%" height="600"
+                  class="mb-4 rounded border border-gray-300"
+                  title="PDF preview for {{ notice.title }}"></iframe>
+        {% endif %}
+      </div>
     </div>
   {% endfor %}
 </div>
+
+
 
 
 
