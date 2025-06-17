@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_browser_reload',
+    'mptt',
 
     'dashboard',
 ]
@@ -65,7 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'dashboard.context_processors.navbar_content',
+                'dashboard.context_processors.menu_items_context',
                 'dashboard.context_processors.quick_links',
                 'dashboard.context_processors.contact_infos',
                 'dashboard.context_processors.social_links'

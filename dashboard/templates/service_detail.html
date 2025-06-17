@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-[#F5F8FF] px-6 pt-16 pb-40 min-h-screen">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <a href="{% url 'service_list' %}" class="inline-flex items-center mb-8 text-blue-600 hover:underline">
+      <!-- Left arrow icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to Services
+    </a>
+
+    <article class="bg-white rounded-xl shadow-md p-8 border border-gray-200">
+      <div class="flex items-center mb-6">
+        <div class="w-14 h-14 p-3 rounded-lg flex items-center justify-center bg-gray-100 mr-6">
+          <img src="{{ service.icon.url }}" alt="{{ service.title }}" class="w-8 h-8"
+               onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
+        </div>
+        <div>
+          {% if service.tag %}
+            <span class="text-sm text-gray-500 block mb-1">{{ service.tag }}</span>
+          {% endif %}
+          <h1 class="text-3xl font-bold text-gray-900">{{ service.title }}</h1>
+        </div>
+      </div>
+
+      <div class="prose max-w-none text-gray-700 whitespace-pre-line">
+        {{ service.description }}
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}

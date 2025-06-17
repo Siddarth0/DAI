@@ -1,13 +1,43 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 import datetime
 
-class NavBar(models.Model):
-    name = models.CharField(max_length=50)
-    url = models.CharField(max_length=200)
+class MenuItem(models.Model):
+    MENU_TYPE_CHOICES = [
+        ('internal', 'Internal Page (by named URL)'),
+        ('external', 'External URL'),
+        ('cms', 'CMS Page'),
+    ]
+
+    name = models.CharField(max_length=100)
+    type = models.CharField(max_length=10, choices=MENU_TYPE_CHOICES, default='internal')
+    link = models.CharField(
+        max_length=255,
+        help_text="If internal, provide named URL or CMS slug. If external, provide full URL."
+    )
+    order = models.PositiveIntegerField(default=0)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        """Returns the actual URL this menu item should point to."""
+        if self.type == 'internal':
+            try:
+                return reverse(self.link)  # Use Django's named URL pattern
+            except:
+                return '#'
+        elif self.type == 'cms':
+            return reverse('cms_page_detail', kwargs={'slug': self.link})  # E.g. /pages/about/
+        elif self.type == 'external':
+            return self.link
+        return '#'
+    
 
 class Banner(models.Model):
     title = models.CharField(max_length=255)
@@ -44,9 +74,10 @@ class SMEStep(models.Model):
 
 
 class Service(models.Model):
+    tag = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
-    subtitle = models.CharField(max_length=100, blank=True, null=True)
-    description = models.TextField()
+    subtitle = models.CharField(max_length=500)
+    description = models.TextField(blank=True)
     icon = models.FileField(upload_to='static/images/icons/')
     order = models.PositiveIntegerField(default=0, help_text='Order in which the services appear')
 
@@ -131,5 +162,22 @@ class Notice(models.Model):
     class Meta:
         ordering = ['popup_order', '-created_at']
 
+
+class CMSPage(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, max_length=255)
+    content = models.TextField()
+    meta_tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated tags for SEO")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
 
     

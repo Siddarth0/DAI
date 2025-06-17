@@ -1,0 +1,11 @@
+<ul>
+  {% for child in children %}
+    <li>
+      <a href="{{ child.get_absolute_url }}">{{ child.name }}</a>
+
+      {% if child.children.exists %}
+        {% include 'partials/menu_children.html' with children=child.children.all %}
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

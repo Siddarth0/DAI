@@ -15,6 +15,9 @@
             background-color: #f3f4f6; /* Light gray background for consistency */
         }
     </style>
+    {% block meta_tags %}
+    <meta name="keywords" content="default, keywords, here">
+    {% endblock %}
 </head>
 <body class="antialiased">
     <!-- Include the header template from the partials directory -->
@@ -28,6 +31,8 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script src="/static/js/script.js"></script>
+
+    <script src="/staticjs/dropdown.js"></script>
 
     <!-- Include the footer template from the partials directory -->
     {% include 'partials/footer.html' with landing_page_content=landing_page_content %}    

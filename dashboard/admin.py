@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import NavBar, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks, Notice
+from .models import MenuItem, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks, Notice, CMSPage
 
-@admin.register(NavBar)
-class NavBarAdmin(admin.ModelAdmin):
-    list_display=('name', 'url')
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'type', 'link', 'order', 'parent')
+    list_filter = ('type', 'parent')
 
     
 @admin.register(Banner)
@@ -56,3 +57,8 @@ class NoticeAdmin(admin.ModelAdmin):
     list_display = ('title', 'image','pdf','is_popup', 'popup_order','created_at')
     list_editable = ('is_popup', 'popup_order')
     ordering = ('popup_order','-created_at',)
+
+@admin.register(CMSPage)
+class CMSPageAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("title",)}
+    list_display = ('title', 'slug', 'created_at')

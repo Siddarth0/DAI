@@ -91,27 +91,40 @@
 {% comment  %}[#F5F8FF]{% endcomment %}
 <section class="relative bg-[#F5F8FF] px-6 pt-16 pb-40 overflow-hidden">
 
-    <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
-        <p class="text-lg text-gray-600">Access business development resources, apply for government support schemes, and grow your enterprise.</p>
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
+    <p class="text-lg text-gray-600">Access business development resources, apply for government support schemes, and grow your enterprise.</p>
+  </div>
+
+  <div class="container mx-auto px-4 relative z-10 flex items-center">
+
+    <!-- Services grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 flex-grow">
+      {% for service in services %}
+        <a href="{% url 'service_detail' service.pk %}" class="block bg-white rounded-xl shadow-md p-6 flex flex-col items-start border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+          <div class="w-12 h-12 p-2 rounded-lg mb-4 flex items-center justify-center bg-gray-100">
+            <img src="{{service.icon.url}}" alt="{{ service.title }}" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
+          </div>
+          {% if service.tag %}
+            <span class="text-sm text-gray-500 mb-2">{{ service.tag }}</span>
+          {% endif %}
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ service.title }}</h3>
+          <p class="text-base text-gray-600">{{ service.subtitle }}</p>
+        </a>
+      {% endfor %}
     </div>
 
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {% for service in services %}
-                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-start border border-gray-200">
-                    <div class="w-12 h-12 p-2 rounded-lg mb-4 flex items-center justify-center bg-gray-100">
-                        <img src="/{{service.icon}}" alt="{{ service.title }}" class="w-8 h-8" onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">
-                    </div>
-                    {% if service.subtitle %}
-                        <span class="text-sm text-gray-500 mb-2">{{ service.subtitle}}</span>
-                    {% endif %}
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ service.title }}</h3>
-                    <p class="text-base text-gray-600">{{ service.description }}</p>
-                </div>
-            {% endfor %}
-        </div>
+
+    <!-- Arrow button outside the services grid -->
+    <div class="ml-4">
+      <a href="{% url 'service_list' %}" aria-label="See all services" class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors duration-300">
+        <!-- Right arrow icon SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
     </div>
+  </div>
 
     <div class="absolute bottom-0 left-0 w-full h-40 overflow-hidden" style="pointer-events: none;">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full" style="transform: scaleY(-1);"> {# Added transform: scaleY(-1) to flip it upside down #}
@@ -146,12 +159,13 @@
 </section>
 
 <!--NEws amd Events-->
+<!-- News and Events -->
 <section class="bg-gray-50 py-16 px-6">
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div class="flex justify-between items-center mb-10">
       <h2 class="text-4xl font-bold text-gray-900">Our News & Events</h2>
-      <a href="#" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition duration-300 text-lg shadow-md">
+      <a href="{% url 'news_list' %}" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition duration-300 text-lg shadow-md">
         See All Events Posts
       </a>
     </div>
@@ -161,7 +175,7 @@
       <!-- Big News Section (2 main events) -->
       <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
         {% for event in news_events|slice:":2" %}
-        <div class="overflow-hidden relative">
+        <a href="{% url 'news_detail' event.id %}" class="block overflow-hidden relative hover:shadow-lg hover:scale-[1.01] transition duration-300 rounded-xl">
           <img src="{{ event.image.url }}" alt="Event Image" class="w-full h-48 object-cover rounded-xl">
           <div class="mt-4">
             <p class="text-sm text-gray-500 mb-1">
@@ -179,34 +193,37 @@
           {% else %}
             <span class="absolute top-4 right-4 bg-blue-600 text-white text-xs px-2 py-1 rounded">News</span>
           {% endif %}
-        </div>
+        </a>
         {% endfor %}
       </div>
 
       <!-- Small News List -->
       <div class="lg:col-span-1">
-        {% for event in news_events|slice:"2:" %}
-        <div class="flex items-center py-3 relative">
-          <img src="{{ event.image.url }}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
-          <div>
-            <p class="text-xs text-gray-500 mb-1">
-              {{ event.start_date|date:"M d, Y" }} · {{ event.is_webinar|yesno:"Webinar,News" }}
-            </p>
-            <h4 class="text-base font-semibold text-gray-900">{{ event.title|truncatewords:8 }}</h4>
-          </div>
+         {% for event in news_events|slice:"2:" %}
+         <a href="{% url 'news_detail' event.id %}" class="block">
+           <div class="flex items-center py-3 relative hover:bg-gray-100 rounded-md px-2 transition">
+           <img src="{{ event.image.url }}" alt="News Thumbnail" class="w-24 h-16 object-cover rounded-md mr-4">
+             <div>
+                <p class="text-xs text-gray-500 mb-1">
+                  {{ event.start_date|date:"M d, Y" }} · {{ event.is_webinar|yesno:"Webinar,News" }}
+                </p>
+                <h4 class="text-base font-semibold text-gray-900">{{ event.title|truncatewords:8 }}</h4>
+              </div>
 
-          {% if event.is_webinar and event.start_date > today %}
-            <span class="absolute top-2 right-2 bg-yellow-500 text-white text-[10px] px-1.5 py-0.5 rounded">Coming Soon</span>
+              {% if event.is_webinar and event.start_date > today %}
+                 <span class="absolute top-2 right-2 bg-yellow-500 text-white text-[10px] px-1.5 py-0.5 rounded">Coming Soon</span>
+              {% endif %}
+            </div>
+          </a>
+          {% if not forloop.last %}
+          <hr class="border-gray-200 my-2">
           {% endif %}
+          {% endfor %}
         </div>
-        {% if not forloop.last %}
-        <hr class="border-gray-200 my-2">
-        {% endif %}
-        {% endfor %}
-      </div>
-    </div>
+     </div>
   </div>
 </section>
+
 
 
 

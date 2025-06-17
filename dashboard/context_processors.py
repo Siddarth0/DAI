@@ -1,9 +1,10 @@
-from .models import NavBar, Quicklinks, ContactInfo, SocialLinks
+from .models import Quicklinks, ContactInfo, SocialLinks, MenuItem
 
-def navbar_content(request):
+def menu_items_context(request):
+    items = MenuItem.objects.filter(parent=None).prefetch_related('children').order_by('order')
     return {
-        'navbar_content': NavBar.objects.all()
-    }
+        'menu_items': items
+        }
 
 def quick_links(request):
     return {

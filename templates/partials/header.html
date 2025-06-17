@@ -1,18 +1,33 @@
 {% load static %}
 
 <header class="bg-white shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <div class="flex items-center ml-[-20px]">
-            <img src="{% static 'images/logos/main_logo.png' %}"  alt="Logo 1" class="w-[65px] h-[32px] mr-4 ">
-            <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="w-[28px] h-[24px] mr-4">
-            <nav class="hidden md:flex space-x-6 text-sm font-medium ml-6">
-               {% for content in navbar_content %}
-                  <a href="{{ content.url }}" class="hover:text-blue-600 transition duration-200">
-                 {{ content.name }}
-                  </a>
-               {% endfor %}
-            </nav>
-        </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <div class="flex items-center ml-[-20px]">
+      <img src="{% static 'images/logos/main_logo.png' %}" alt="Logo 1" class="w-[65px] h-[32px] mr-4">
+      <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="w-[28px] h-[24px] mr-4">
+
+      <nav class="hidden md:flex space-x-6 text-sm font-medium ml-6">
+        <ul class="flex space-x-6">
+          {% for item in menu_items %}
+            <li class="relative group">
+              <a href="{{ item.get_absolute_url }}" class="hover:text-blue-600 transition duration-200"
+                {% if item.get_absolute_url|slice:":7" == "http://" or item.get_absolute_url|slice:":8" == "https://" %}
+                  target="_blank" rel="noopener noreferrer"
+                {% endif %}>
+                {{ item.name }}
+              </a>
+
+              {% if item.children.exists %}
+                <ul class="absolute left-0 top-full w-48 bg-white border rounded shadow-md invisible opacity-0 group-hover:visible group-hover:opacity-100 transition duration-300">
+                  {% include 'partials/menu_children.html' with children=item.children.all %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+
     <div class="space-x-2">
       <a href="#">
         <button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">Register</button>
@@ -21,5 +36,5 @@
         <button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">Login</button>
       </a>
     </div>
-    </div>
+  </div>
 </header>
