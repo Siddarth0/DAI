@@ -1,4 +1,4 @@
-from .models import NavBar, Quicklinks, ContactInfo
+from .models import NavBar, Quicklinks, ContactInfo, SocialLinks
 
 def navbar_content(request):
     return {
@@ -13,4 +13,9 @@ def quick_links(request):
 def contact_infos(request):
     return{
         'contact_infos': ContactInfo.objects.all()
+    }
+
+def social_links(request):
+    return{
+        'social_links': SocialLinks.objects.all
     }

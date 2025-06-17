@@ -68,6 +68,7 @@ TEMPLATES = [
                 'dashboard.context_processors.navbar_content',
                 'dashboard.context_processors.quick_links',
                 'dashboard.context_processors.contact_infos',
+                'dashboard.context_processors.social_links'
             ],
         },
     },
