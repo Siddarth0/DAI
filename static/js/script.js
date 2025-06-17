@@ -92,17 +92,3 @@ document.addEventListener('DOMContentLoaded', function () {
         showPopup(currentIndex);
     }
 });
-
-//news hover scroll
-let scrollInterval;
-
-  function startScroll(direction) {
-    const wrapper = document.getElementById('services-wrapper');
-    scrollInterval = setInterval(() => {
-      wrapper.scrollLeft += direction === 'right' ? 10 : -10;
-    }, 15);
-  }
-
-  function stopScroll() {
-    clearInterval(scrollInterval);
-  }
