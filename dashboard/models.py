@@ -179,12 +179,9 @@ class CMSPage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._original_title = self.title 
 
     def save(self, *args, **kwargs):
-        if not self.slug or (self.pk and CMSPage.objects.get(pk=self.pk).title != self.title):  # Generate slug only if it's missing
+        if not self.slug:  # Generate slug only if it's missing
             base_slug = slugify(self.title)
             unique_slug = base_slug
             counter = 1
@@ -199,13 +196,8 @@ class CMSPage(models.Model):
     def __str__(self):
         return self.title
 
-
-
-
     def get_absolute_url(self):
         return reverse("cms_page_detail", kwargs={"slug": self.slug})
 
-    def __str__(self):
-        return self.title
 
     
