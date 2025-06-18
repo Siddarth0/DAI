@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django import forms
-from django.urls import get_resolver
+from django.urls import get_resolver, reverse
 from .models import MenuItem, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks, Notice, CMSPage
 
 
 class MenuItemAdminForm(forms.ModelForm):
+
     internal_link = forms.ChoiceField(
         choices=[],
         required=False,
@@ -28,16 +29,25 @@ class MenuItemAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         url_patterns = get_resolver().reverse_dict
-        internal_choices = [('#', '# (No Link / Stay on Same Page)')] + [(name, name) for name in url_patterns if isinstance(name, str) and not name.startswith("admin")]
-        cms_choices = [('#', '# (No Link / Stay on Same Page)')] + [(page.slug, page.title) for page in CMSPage.objects.all()]
+        internal_choices = [('', 'Select Internal Route')] + [(name, name) for name in url_patterns if isinstance(name, str) and not name.startswith("admin")]
+        self.fields['internal_link'].choices = internal_choices
 
-        self.fields['internal_link'].choices = [('', 'Select Internal URL')] + internal_choices
-        self.fields['cms_link'].choices = [('', 'Select CMS Page')] + cms_choices
+
+        cms_choices = [('', 'Select CMS Page')] + [(page.id, page.title) for page in CMSPage.objects.all()]
+        self.fields['cms_link'].choices = cms_choices
+
 
         # Ensuring initial value for the correct link field based on instance type and link
         if self.instance and self.instance.pk:
             selected_type = self.instance.type
-            self.initial[selected_type + '_link'] = self.instance.link if selected_type in ['internal', 'cms', 'external'] else '#'
+
+            if selected_type == 'internal':
+                self.initial['module'] = self.instance.module
+            elif selected_type == 'cms':
+                self.initial['cms_link'] = self.instance.cms_id.id if self.instance.cms_id else None 
+            elif selected_type == 'external':
+                self.initial['external_link'] = self.instance.module
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -48,7 +58,12 @@ class MenuItemAdminForm(forms.ModelForm):
             raise forms.ValidationError("Invalid link type selected.")
 
         # Dynamically set link field based on type
-        cleaned_data['link'] = cleaned_data.get(f"{link_type}_link", '#')
+        if link_type == 'cms':
+            cleaned_data['cms_id'] = CMSPage.objects.get(id=cleaned_data.get('cms_link'))
+
+        elif link_type == 'internal':
+            cleaned_data['module'] = cleaned_data.get('internal_link')
+
         return cleaned_data
 
 
@@ -56,8 +71,15 @@ class MenuItemAdminForm(forms.ModelForm):
         instance = super().save(commit=False)
         link_type = self.cleaned_data.get('type')
 
-        # Assign correct link dynamically
-        instance.link = self.cleaned_data.get(f"{link_type}_link", '#')
+        if link_type == 'cms':
+            instance.cms_id = self.cleaned_data.get('cms_id') # Save the selected CMSPage
+
+
+        elif link_type == 'internal':
+            instance.module = self.cleaned_data.get('module')  # Store named route
+
+        elif link_type == 'external':
+            instance.module = self.cleaned_data.get('external_link')
 
         if commit:
             instance.save()
@@ -69,11 +91,12 @@ class MenuItemAdminForm(forms.ModelForm):
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
     form = MenuItemAdminForm
+    readonly_fields = ['module']
 
     class Media:
         js = ('admin/menuitem_type_toggle.js',)
 
-    list_display = ('name', 'type', 'link', 'order', 'parent')
+    list_display = ('name', 'type', 'module', 'order', 'parent')
     list_filter = ('type', 'parent')
 
     
@@ -128,7 +151,14 @@ class NoticeAdmin(admin.ModelAdmin):
     list_editable = ('is_popup', 'popup_order')
     ordering = ('popup_order','-created_at',)
 
+
+class CMSPageForm(forms.ModelForm):
+    class Meta:
+        model = CMSPage
+        fields = ['title', 'content', 'meta_tags']
+
 @admin.register(CMSPage)
 class CMSPageAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("title",)}
-    list_display = ('title', 'slug', 'created_at')
+    form = CMSPageForm
+    readonly_fields = ['slug'] 
+    list_display = ['title', 'slug', 'updated_at']

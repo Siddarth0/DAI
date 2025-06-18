@@ -1,7 +1,10 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.urls import NoReverseMatch
+
 import datetime
+
 
 class MenuItem(models.Model):
     MENU_TYPE_CHOICES = [
@@ -10,14 +13,14 @@ class MenuItem(models.Model):
         ('cms', 'CMS Page'),
     ]
 
+
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10, choices=MENU_TYPE_CHOICES, default='internal')
-    link = models.CharField(
-        max_length=255,
-        help_text="If internal, provide named URL or CMS slug. If external, provide full URL."
-    )
     order = models.PositiveIntegerField(default=0)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+
+    cms_id = models.ForeignKey('CMSPage', on_delete=models.SET_NULL, null=True, blank=True)
+    module = models.CharField(max_length=100, blank=True, null=True, help_text="Named URL for internal pages")
 
     class Meta:
         ordering = ['order']
@@ -25,18 +28,22 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
+    @property
+    def absolute_url(self):
         """Returns the actual URL this menu item should point to."""
-        if self.type == 'internal':
-            try:
-                return reverse(self.link)  # Use Django's named URL pattern
-            except:
-                return '#'
-        elif self.type == 'cms':
-            return reverse('cms_page_detail', kwargs={'slug': self.link})  # E.g. /pages/about/
-        elif self.type == 'external':
-            return self.link
+        try:
+           if self.type == 'internal' and self.module:
+               return reverse(self.module)
+            
+           elif self.type == 'cms' and self.cms_id:
+               return reverse("cms_page_detail", kwargs={"slug": self.cms_id.slug})
+           elif self.type == 'external' and self.module:
+               return self.module  # External links remain unchanged
+        except NoReverseMatch:
+            pass #
+        
         return '#'
+
     
 
 class Banner(models.Model):
@@ -165,7 +172,7 @@ class Notice(models.Model):
 
 class CMSPage(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, max_length=255)
+    slug = models.SlugField(unique=True, max_length=255, editable=False)
     content = models.TextField()
     meta_tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated tags for SEO")
 
@@ -173,9 +180,26 @@ class CMSPage(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+        if not self.slug:  # Generate slug only if it's missing
+            base_slug = slugify(self.title)
+            unique_slug = base_slug
+            counter = 1
+
+            while CMSPage.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = unique_slug  # Set the unique slug once
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+
+
+    def get_absolute_url(self):
+        return reverse("cms_page_detail", kwargs={"slug": self.slug})
 
     def __str__(self):
         return self.title
