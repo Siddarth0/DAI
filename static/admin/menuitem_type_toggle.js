@@ -4,24 +4,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const cmsField = document.querySelector('.form-row.field-cms_link');
     const externalField = document.querySelector('.form-row.field-external_link');
 
-    function toggleFields() {
-        const type = typeSelect.value;
-
-        internalField.style.display = 'none';
-        cmsField.style.display = 'none';
-        externalField.style.display = 'none';
-
-        if (type === 'internal') {
-            internalField.style.display = 'block';
-        } else if (type === 'cms') {
-            cmsField.style.display = 'block';
-        } else if (type === 'external') {
-            externalField.style.display = 'block';
+    function toggleLinkFields() {
+        const selectedType = typeSelect.value;
+        if (selectedType === 'internal') {
+            internalField.style.display = '';
+            cmsField.style.display = 'none';
+            externalField.style.display = 'none';
+        } else if (selectedType === 'cms') {
+            internalField.style.display = 'none';
+            cmsField.style.display = '';
+            externalField.style.display = 'none';
+        } else if (selectedType === 'external') {
+            internalField.style.display = 'none';
+            cmsField.style.display = 'none';
+            externalField.style.display = '';
+        } else {
+            internalField.style.display = 'none';
+            cmsField.style.display = 'none';
+            externalField.style.display = 'none';
         }
     }
 
-    if (typeSelect) {
-        typeSelect.addEventListener('change', toggleFields);
-        toggleFields(); // run on page load
-    }
+    typeSelect.addEventListener('change', toggleLinkFields);
+    toggleLinkFields();  // run on page load
 });

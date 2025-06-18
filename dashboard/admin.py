@@ -34,8 +34,8 @@ class MenuItemAdminForm(forms.ModelForm):
         self.fields['internal_link'].choices = [('', 'Select Internal URL')] + internal_choices
         self.fields['cms_link'].choices = [('', 'Select CMS Page')] + cms_choices
 
-        # Pre-fill values into correct fields
-        if self.instance and self.instance.link:
+        # Set initial value for the correct link field based on instance type and link
+        if self.instance and self.instance.pk:
             if self.instance.type == 'internal':
                 self.initial['internal_link'] = self.instance.link
             elif self.instance.type == 'cms':
@@ -50,13 +50,30 @@ class MenuItemAdminForm(forms.ModelForm):
         if link_type == 'internal':
             cleaned_data['link'] = cleaned_data.get('internal_link') or '#'
         elif link_type == 'cms':
-            cleaned_data['link'] = cleaned_data.get('cms_link') or "#"
+            cleaned_data['link'] = cleaned_data.get('cms_link') or '#'
         elif link_type == 'external':
             cleaned_data['link'] = cleaned_data.get('external_link') or '#'
         else:
             cleaned_data['link'] = '#'
 
         return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        link_type = self.cleaned_data.get('type')
+        if link_type == 'internal':
+            instance.link = self.cleaned_data.get('internal_link') or '#'
+        elif link_type == 'cms':
+            instance.link = self.cleaned_data.get('cms_link') or '#'
+        elif link_type == 'external':
+            instance.link = self.cleaned_data.get('external_link') or '#'
+        else:
+            instance.link = '#'
+
+        if commit:
+            instance.save()
+        return instance
 
 
 
