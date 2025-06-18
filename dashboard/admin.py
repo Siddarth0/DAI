@@ -1,8 +1,72 @@
 from django.contrib import admin
+from django import forms
+from django.urls import get_resolver
 from .models import MenuItem, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks, Notice, CMSPage
+
+
+class MenuItemAdminForm(forms.ModelForm):
+    internal_link = forms.ChoiceField(
+        choices=[],
+        required=False,
+        label='Internal Link'
+    )
+    cms_link = forms.ChoiceField(
+        choices=[],
+        required=False,
+        label='CMS Page'
+    )
+    external_link = forms.CharField(
+        required=False,
+        label='External URL'
+    )
+
+    class Meta:
+        model = MenuItem
+        fields = ['name', 'type', 'internal_link', 'cms_link', 'external_link', 'order', 'parent']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        url_patterns = get_resolver().reverse_dict
+        internal_choices = [('#', '# (No Link / Stay on Same Page)')] + [(name, name) for name in url_patterns if isinstance(name, str) and not name.startswith("admin")]
+        cms_choices = [('#', '# (No Link / Stay on Same Page)')] + [(page.slug, page.title) for page in CMSPage.objects.all()]
+
+        self.fields['internal_link'].choices = [('', 'Select Internal URL')] + internal_choices
+        self.fields['cms_link'].choices = [('', 'Select CMS Page')] + cms_choices
+
+        # Pre-fill values into correct fields
+        if self.instance and self.instance.link:
+            if self.instance.type == 'internal':
+                self.initial['internal_link'] = self.instance.link
+            elif self.instance.type == 'cms':
+                self.initial['cms_link'] = self.instance.link
+            elif self.instance.type == 'external':
+                self.initial['external_link'] = self.instance.link
+
+    def clean(self):
+        cleaned_data = super().clean()
+        link_type = cleaned_data.get('type')
+
+        if link_type == 'internal':
+            cleaned_data['link'] = cleaned_data.get('internal_link') or '#'
+        elif link_type == 'cms':
+            cleaned_data['link'] = cleaned_data.get('cms_link') or "#"
+        elif link_type == 'external':
+            cleaned_data['link'] = cleaned_data.get('external_link') or '#'
+        else:
+            cleaned_data['link'] = '#'
+
+        return cleaned_data
+
+
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
+    form = MenuItemAdminForm
+
+    class Media:
+        js = ('admin/menuitem_type_toggle.js',)
+
     list_display = ('name', 'type', 'link', 'order', 'parent')
     list_filter = ('type', 'parent')
 
