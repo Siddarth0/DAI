@@ -34,46 +34,35 @@ class MenuItemAdminForm(forms.ModelForm):
         self.fields['internal_link'].choices = [('', 'Select Internal URL')] + internal_choices
         self.fields['cms_link'].choices = [('', 'Select CMS Page')] + cms_choices
 
-        # Set initial value for the correct link field based on instance type and link
+        # Ensuring initial value for the correct link field based on instance type and link
         if self.instance and self.instance.pk:
-            if self.instance.type == 'internal':
-                self.initial['internal_link'] = self.instance.link
-            elif self.instance.type == 'cms':
-                self.initial['cms_link'] = self.instance.link
-            elif self.instance.type == 'external':
-                self.initial['external_link'] = self.instance.link
+            selected_type = self.instance.type
+            self.initial[selected_type + '_link'] = self.instance.link if selected_type in ['internal', 'cms', 'external'] else '#'
 
     def clean(self):
         cleaned_data = super().clean()
         link_type = cleaned_data.get('type')
 
-        if link_type == 'internal':
-            cleaned_data['link'] = cleaned_data.get('internal_link') or '#'
-        elif link_type == 'cms':
-            cleaned_data['link'] = cleaned_data.get('cms_link') or '#'
-        elif link_type == 'external':
-            cleaned_data['link'] = cleaned_data.get('external_link') or '#'
-        else:
-            cleaned_data['link'] = '#'
+        # Validate link type explicitly
+        if link_type not in ['internal', 'cms', 'external']:
+            raise forms.ValidationError("Invalid link type selected.")
 
+        # Dynamically set link field based on type
+        cleaned_data['link'] = cleaned_data.get(f"{link_type}_link", '#')
         return cleaned_data
+
 
     def save(self, commit=True):
         instance = super().save(commit=False)
-
         link_type = self.cleaned_data.get('type')
-        if link_type == 'internal':
-            instance.link = self.cleaned_data.get('internal_link') or '#'
-        elif link_type == 'cms':
-            instance.link = self.cleaned_data.get('cms_link') or '#'
-        elif link_type == 'external':
-            instance.link = self.cleaned_data.get('external_link') or '#'
-        else:
-            instance.link = '#'
+
+        # Assign correct link dynamically
+        instance.link = self.cleaned_data.get(f"{link_type}_link", '#')
 
         if commit:
             instance.save()
         return instance
+
 
 
 
