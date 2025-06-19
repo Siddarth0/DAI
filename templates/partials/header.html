@@ -1,24 +1,37 @@
 {% load static %}
 
-<header class="bg-white shadow-sm">
+<header class="bg-white shadow-sm" x-data>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+
+    <!-- Logo + Nav (Desktop) -->
     <div class="flex items-center ml-[-20px]">
       <img src="{% static 'images/logos/main_logo.png' %}" alt="Logo 1" class="w-[65px] h-[32px] mr-4">
       <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="w-[28px] h-[24px] mr-4">
 
-      <nav class="hidden md:flex space-x-6 text-sm font-medium ml-6">
-        <ul class="flex space-x-6">
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex text-sm font-medium ml-6">
+        <ul class="flex space-x-6 relative z-50">
           {% for item in menu_items %}
-            <li class="relative group">
-              <a href="{{ item.absolute_url }}"
-                {% if item.type == 'external' %}
-                    target="_blank" rel="noopener noreferrer"
-                {% endif %}>
-                {{ item.name }}
-              </a>
+            <li class="relative group" x-data="{ open: false }">
+             <div class="flex items-center justify-between hover:text-blue-600 transition duration-200 text-sm font-medium">
+               <a href="{{ item.get_absolute_url }}" class="grow">
+                 {{ item.name }}
+               </a>
+
+               {% if item.children.exists %}
+                  <button @click="open = !open" class="ml-1 text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <svg :class="{ 'rotate-90': open }" class="w-3 h-3 transform transition-transform" fill="none"
+                       stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+               {% endif %}
+             </div>
 
               {% if item.children.exists %}
-                  {% include 'partials/menu_children.html' with children=item.children.all %}
+               <ul x-show="open" x-transition class="absolute top-full left-0 bg-white border rounded shadow-md w-48 z-50">
+                {% include 'partials/menu_children.html' with children=item.children.all %}
+               </ul>
               {% endif %}
             </li>
           {% endfor %}
@@ -26,13 +39,18 @@
       </nav>
     </div>
 
-    <div class="space-x-2">
-      <a href="#">
-        <button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">Register</button>
-      </a>
-      <a href="#">
-        <button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">Login</button>
-      </a>
+    <!-- Desktop CTAs -->
+    <div class="hidden md:flex space-x-2">
+      <a href="#"><button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">Register</button></a>
+      <a href="{% url 'login' %}"><button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">Login</button></a>
     </div>
+
+    <!-- Hamburger for Mobile -->
+    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-800 focus:outline-none">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path :class="{ 'hidden': mobileMenuOpen }" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        <path :class="{ 'hidden': !mobileMenuOpen }" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
   </div>
 </header>

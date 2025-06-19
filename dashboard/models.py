@@ -28,8 +28,7 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.name
 
-    @property
-    def absolute_url(self):
+    def get_absolute_url(self):
         """Returns the actual URL this menu item should point to."""
         try:
            if self.type == 'internal' and self.module:
