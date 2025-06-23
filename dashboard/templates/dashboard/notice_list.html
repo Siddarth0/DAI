@@ -8,7 +8,7 @@
   {% if notices %}
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {% for notice in notices %}
-        <a href="{% url 'notice_detail' notice.id %}"
+        <a href="{% url 'dashboard:notice_detail' notice.id %}"
            class="bg-white shadow-md hover:shadow-xl border border-gray-100 rounded-xl overflow-hidden transition duration-300 group flex flex-col">
           
           <!-- Image -->

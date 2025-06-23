@@ -15,7 +15,7 @@
             <li class="relative group" x-data="{ open: false }">
              <div class="flex items-center justify-between hover:text-blue-600 transition duration-200 text-sm font-medium">
                <a href="{{ item.get_absolute_url }}" class="grow">
-                 {{ item.name }}
+                 {{ item.name}}
                </a>
 
                {% if item.children.exists %}
@@ -41,8 +41,8 @@
 
     <!-- Desktop CTAs -->
     <div class="hidden md:flex space-x-2">
-      <a href="#"><button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">Register</button></a>
-      <a href="{% url 'login' %}"><button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">Login</button></a>
+      <a href={% url 'authys:welcome_page' %}><button class="bg-black text-white px-4 py-1 rounded text-sm hover:bg-gray-800">Register</button></a>
+      <a href="{% url 'authys:login' %}"><button class="border px-4 py-1 rounded hover:bg-gray-100 text-sm">Login</button></a>
     </div>
 
     <!-- Hamburger for Mobile -->

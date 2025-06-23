@@ -40,8 +40,13 @@ INSTALLED_APPS = [
 
     'django_browser_reload',
     'mptt',
+    'widget_tweaks',
 
     'dashboard',
+
+    'adminDashboard',
+
+    'authys'
 ]
 
 MIDDLEWARE = [
@@ -69,7 +74,8 @@ TEMPLATES = [
                 'dashboard.context_processors.menu_items_context',
                 'dashboard.context_processors.quick_links',
                 'dashboard.context_processors.contact_infos',
-                'dashboard.context_processors.social_links'
+                'dashboard.context_processors.social_links',
+                'adminDashboard.context_processors.available_models',
             ],
         },
     },
@@ -139,3 +145,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/' 
 LOGOUT_REDIRECT_URL = '/login/'
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailBackend',  # your new backend
+    'django.contrib.auth.backends.ModelBackend',  # optional fallback
+]

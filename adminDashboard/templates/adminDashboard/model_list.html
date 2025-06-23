@@ -1,0 +1,72 @@
+{% extends "adminDashboard/base.html" %}
+{% load dashboard_tags %}
+
+{% block title %}Manage {{ model_name|capfirst }}{% endblock %}
+
+{% block content %}
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold">Manage {{ model_name|capfirst }}</h1>
+    <a href="{% url 'adminDashboard:model_add' model_name=model_name %}" 
+       class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-150 text-sm">
+      + Add {{ model_name|capfirst }}
+    </a>
+  </div>
+
+  <div class="overflow-x-auto bg-white rounded shadow">
+    <table class="min-w-full table-auto border-collapse">
+      <thead>
+        <tr class="bg-gray-100 text-left text-sm text-gray-700">
+          {% for field in fields %}
+            <th class="border-b px-4 py-3 capitalize font-medium">{{ field }}</th>
+          {% endfor %}
+          <th class="border-b px-4 py-3 font-medium">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-sm">
+        {% for obj in objects %}
+          <tr class="hover:bg-gray-50">
+            {% for field in fields %}
+              <td class="border-t px-4 py-2 text-gray-800">{{ obj|get_attr:field }}</td>
+            {% endfor %}
+            <td class="border-t px-4 py-2">
+              <div class="flex space-x-2">
+                <a href="{% url 'adminDashboard:model_edit' model_name=model_name pk=obj.pk %}" 
+                   class="px-3 py-1 text-sm text-white bg-blue-600 rounded hover:bg-blue-700 transition">
+                  Edit
+                </a>
+                <a href="{% url 'adminDashboard:model_delete' model_name=model_name pk=obj.pk %}" 
+                   class="px-3 py-1 text-sm text-white bg-red-600 rounded hover:bg-red-700 transition">
+                  Delete
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="{{ fields|length|add:'1' }}" class="text-center px-6 py-4 text-gray-500">
+              No {{ model_name }} entries found.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if objects.has_other_pages %}
+    <div class="mt-6 flex items-center space-x-4 text-sm">
+      {% if objects.has_previous %}
+        <a href="?page={{ objects.previous_page_number }}" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">
+          Previous
+        </a>
+      {% endif %}
+
+      <span class="text-gray-700">Page {{ objects.number }} of {{ objects.paginator.num_pages }}</span>
+
+      {% if objects.has_next %}
+        <a href="?page={{ objects.next_page_number }}" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">
+          Next
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}

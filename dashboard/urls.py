@@ -2,6 +2,8 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 
+app_name = 'dashboard'
+
 urlpatterns = [
     path('', views.landing_page, name='landing_page'),
 
@@ -15,8 +17,5 @@ urlpatterns = [
     path('news/<int:id>/', views.news_detail, name='news_detail'),
 
     path('cms/<slug:slug>/', views.cms_page_detail, name='cms_page_detail'),
-
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
 ]

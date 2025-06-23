@@ -18,5 +18,5 @@ def contact_infos(request):
 
 def social_links(request):
     return{
-        'social_links': SocialLinks.objects.all
+        'social_links': SocialLinks.objects.all()
     }

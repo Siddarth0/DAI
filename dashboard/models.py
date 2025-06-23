@@ -37,7 +37,7 @@ class MenuItem(models.Model):
            elif self.type == 'cms' and self.cms_id:
                return reverse("cms_page_detail", kwargs={"slug": self.cms_id.slug})
            elif self.type == 'external' and self.module:
-               return self.module  # External links remain unchanged
+               return self.module 
         except NoReverseMatch:
             pass #
 
