@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="bg-white py-16 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">All News & Events</h1>
+      <p class="text-lg text-gray-600">Stay updated with the latest news, webinars, and events.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for event in news_events %}
+      <a href="{% url 'dashboard:news_detail' event.id %}" class="bg-gray-50 hover:bg-white transition p-4 rounded-xl shadow group">
+        <div class="relative">
+          <img src="{{ event.image.url }}" alt="Event Image" class="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition duration-300">
+          {% if event.is_webinar and event.start_date > today %}
+            <span class="absolute top-4 left-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded shadow">Coming Soon</span>
+          {% elif event.is_webinar %}
+            <span class="absolute top-4 left-4 bg-purple-600 text-white text-xs px-2 py-1 rounded shadow">Webinar</span>
+          {% else %}
+            <span class="absolute top-4 left-4 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow">News</span>
+          {% endif %}
+        </div>
+        <div class="mt-4">
+          <p class="text-sm text-gray-500 mb-1">
+            {{ event.start_date|date:"M d, Y" }}{% if event.location %} - {{ event.location }}{% endif %}
+          </p>
+          <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ event.title }}</h3>
+          <p class="text-sm text-gray-600 line-clamp-3">{{ event.content|truncatewords:25 }}</p>
+        </div>
+      </a>
+      {% empty %}
+      <p class="text-center col-span-3 text-gray-500">No events or news available at the moment.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

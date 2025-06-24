@@ -35,7 +35,7 @@ class MenuItem(models.Model):
                return reverse(self.module)
             
            elif self.type == 'cms' and self.cms_id:
-               return reverse("cms_page_detail", kwargs={"slug": self.cms_id.slug})
+               return reverse("dashboard:cms_page_detail", kwargs={"slug": self.cms_id.slug})
            elif self.type == 'external' and self.module:
                return self.module 
         except NoReverseMatch:
@@ -55,6 +55,7 @@ class Banner(models.Model):
     button2_text = models.CharField(max_length=50, blank=True, null=True)
     button2_link = models.URLField(blank=True, null=True)
 
+    is_active = models.BooleanField(default=True)
 
     order = models.PositiveIntegerField(default=0)
 
@@ -131,6 +132,10 @@ class ContactInfo(models.Model):
     contact_type = models.CharField(max_length=10, choices=type_choices)
     value = models.CharField(max_length=255)
 
+    class Meta:
+        verbose_name = "Contact Info"
+        verbose_name_plural = "Contact Infos"
+
     def __str__(self):
         return f"{self.get_contact_type_display()}: {self.value}"
     
@@ -139,12 +144,20 @@ class Quicklinks(models.Model):
     name = models.CharField(max_length=100)
     url = models.URLField()
 
+    class Meta:
+        verbose_name = "Quick Link"
+        verbose_name_plural = "Quick Links"
+
     def __str__(self):
         return self.name
 
 class SocialLinks(models.Model):
     icon = models.FileField(upload_to='static/images/icons/')
     url= models.URLField()
+
+    class Meta:
+        verbose_name = "Social Link"
+        verbose_name_plural = "Social Links"
 
     def __str__(self):
         return "SocialLinks"
@@ -157,6 +170,7 @@ class Notice(models.Model):
     pdf = models.FileField(upload_to='static/notices',blank=True, null=True)
     is_popup = models.BooleanField(default=False, help_text="Check to show this notice as a pop up")
     popup_order = models.PositiveIntegerField(blank = True, null=True, help_text="order of popup display if multiple") 
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title

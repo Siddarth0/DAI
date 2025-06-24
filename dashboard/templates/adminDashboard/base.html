@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Admin Panel{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="antialiased bg-gray-100 font-satoshi">
+
+  <!-- NAVBAR -->
+<header class="bg-white shadow-sm w-full z-10">
+  <div class="w-full px-6 py-4 flex items-center justify-between">
+
+    <!-- Left: Logos + Links -->
+    <div class="flex items-center space-x-6">
+      <img src="{% static 'images/logos/main_logo.png' %}" alt="Logo 1" class="h-10">
+      <img src="{% static 'images/logos/secondary_logo.png' %}" alt="Logo 2" class="h-10">
+
+      <nav class="flex space-x-6 ml-6">
+        <a href="#" class="text-sm text-gray-700 hover:text-blue-600 font-medium">Scheme</a>
+        <a href="#" class="text-sm text-gray-700 hover:text-blue-600 font-medium">Policies</a>
+      </nav>
+    </div>
+
+    <!-- Right: Search -->
+    <form method="get" action="#" class="relative w-72">
+      <input type="text" name="q" placeholder="Search for application" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-200 focus:outline-none focus:border-blue-500 shadow-sm">
+    </form>
+
+    <form method="post" action="{% url 'dashboard:login' %}">
+    {% csrf_token %}
+    <button type="submit" class="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+       Logout
+    </button>
+  </form>
+
+  </div>
+</header>
+
+  <!-- SIDEBAR + CONTENT WRAPPER -->
+  <div class="flex">
+    <!-- SIDEBAR -->
+<aside class="w-64 bg-white h-screen p-6 border-r">
+  <a href="{% url 'dashboard:dashboard_home' %}" class="text-lg font-semibold mb-6 block text-blue-700 hover:underline">
+    Dashboard
+  </a>
+
+  <nav class="space-y-1">
+  {% for name, info in models %}
+  <a href="{% url 'dashboard:model_list' name %}"
+     class="block px-3 py-2 rounded-md text-sm capitalize
+            {% if name == current_model_name %}
+              bg-blue-50 text-blue-700 font-medium
+            {% else %}
+              text-gray-700 hover:bg-gray-100 hover:text-blue-600
+            {% endif %}">
+    {{ info.verbose_name }}
+  </a>
+{% endfor %}
+
+  </nav>
+</aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      {% block content %}
+      {% endblock %}
+    </main>
+  </div>
+
+</body>
+</html>

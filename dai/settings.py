@@ -39,14 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_browser_reload',
-    'mptt',
     'widget_tweaks',
 
     'dashboard',
-
-    'adminDashboard',
-
-    'authys'
 ]
 
 MIDDLEWARE = [
@@ -71,11 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'dashboard.context_processors.menu_items_context',
-                'dashboard.context_processors.quick_links',
-                'dashboard.context_processors.contact_infos',
-                'dashboard.context_processors.social_links',
-                'adminDashboard.context_processors.available_models',
+                'dashboard.context_processors.global_context',
             ],
         },
     },
@@ -142,7 +133,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'login/'
 LOGIN_REDIRECT_URL = '/' 
 LOGOUT_REDIRECT_URL = '/login/'
 

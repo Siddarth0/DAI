@@ -1,0 +1,152 @@
+{% extends 'adminDashboard/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{{ mode }} {{ model_name|capfirst }}{% endblock %}
+
+{% block content %}
+  <div class="max-w-xl bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">{{ mode }} {{ model_name|capfirst }}</h1>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-5">
+      {% csrf_token %}
+
+      {% if model_name == 'menuitem' %}
+        <!-- MenuItem fields explicitly rendered -->
+        <div>
+          <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ form.name.label }}
+          </label>
+          {{ form.name|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+          {% if form.name.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ form.name.errors|striptags }}</p>
+          {% endif %}
+          {% if form.name.help_text %}
+            <p class="text-gray-500 text-xs mt-1">{{ form.name.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.type.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ form.type.label }}
+          </label>
+          {{ form.type|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+          {% if form.type.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ form.type.errors|striptags }}</p>
+          {% endif %}
+          {% if form.type.help_text %}
+            <p class="text-gray-500 text-xs mt-1">{{ form.type.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div id="internal_link_field" style="display:none;">
+          <label for="{{ form.internal_link.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ form.internal_link.label }}
+          </label>
+          {{ form.internal_link|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+          {% if form.internal_link.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ form.internal_link.errors|striptags }}</p>
+          {% endif %}
+          {% if form.internal_link.help_text %}
+            <p class="text-gray-500 text-xs mt-1">{{ form.internal_link.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div id="cms_link_field" style="display:none;">
+          <label for="{{ form.cms_link.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ form.cms_link.label }}
+          </label>
+          {{ form.cms_link|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+          {% if form.cms_link.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ form.cms_link.errors|striptags }}</p>
+          {% endif %}
+          {% if form.cms_link.help_text %}
+            <p class="text-gray-500 text-xs mt-1">{{ form.cms_link.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div id="external_link_field" style="display:none;">
+          <label for="{{ form.external_link.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ form.external_link.label }}
+          </label>
+          {{ form.external_link|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+          {% if form.external_link.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ form.external_link.errors|striptags }}</p>
+          {% endif %}
+          {% if form.external_link.help_text %}
+            <p class="text-gray-500 text-xs mt-1">{{ form.external_link.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.order.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ form.order.label }}
+          </label>
+          {{ form.order|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+          {% if form.order.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ form.order.errors|striptags }}</p>
+          {% endif %}
+          {% if form.order.help_text %}
+            <p class="text-gray-500 text-xs mt-1">{{ form.order.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.parent.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ form.parent.label }}
+          </label>
+          {{ form.parent|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+          {% if form.parent.errors %}
+            <p class="text-red-600 text-sm mt-1">{{ form.parent.errors|striptags }}</p>
+          {% endif %}
+          {% if form.parent.help_text %}
+            <p class="text-gray-500 text-xs mt-1">{{ form.parent.help_text }}</p>
+          {% endif %}
+        </div>
+
+      {% else %}
+        <!-- Generic loop to render fields for other models -->
+        {% for field in form.visible_fields %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+              {{ field.label }}
+            </label>
+            {{ field|add_class:"mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" }}
+            {% if field.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ field.errors|striptags }}</p>
+            {% endif %}
+            {% if field.help_text %}
+              <p class="text-gray-500 text-xs mt-1">{{ field.help_text }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <div class="flex justify-start space-x-4 pt-4">
+        <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-md text-sm font-semibold hover:bg-blue-700 transition duration-150">
+          Save
+        </button>
+        <a href="{% url 'dashboard:model_list' model_name=model_name %}" class="px-5 py-2 bg-gray-200 text-gray-700 rounded-md text-sm font-semibold hover:bg-gray-300 transition duration-150">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+
+  {% if model_name == 'menuitem' %}
+  <script>
+    function toggleLinkFields() {
+      const type = document.getElementById('{{ form.type.id_for_label }}').value;
+
+      document.getElementById('internal_link_field').style.display = (type === 'internal') ? 'block' : 'none';
+      document.getElementById('cms_link_field').style.display = (type === 'cms') ? 'block' : 'none';
+      document.getElementById('external_link_field').style.display = (type === 'external') ? 'block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const typeField = document.getElementById('{{ form.type.id_for_label }}');
+      toggleLinkFields();
+      typeField.addEventListener('change', toggleLinkFields);
+    });
+  </script>
+  {% endif %}
+{% endblock %}

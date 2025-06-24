@@ -1,0 +1,99 @@
+<!-- home.html -->
+{% extends "authys/base.html" %}
+{% load static %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+
+<div class="text-center mb-8">
+  <h1 class="text-3xl text-[color:#101828] font-satoshi font-bold">Welcome to the Digital Information Portal</h1>
+  <p class="text-lg text-gray-600 mt-2">Choose your role to access personalized services</p>
+</div>
+
+<!-- Registration Cards -->
+<div id="cards" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <!-- SME Card -->
+  <div id="smeCard"
+     class="cursor-pointer bg-white p-6 rounded-lg shadow-md border-2 border-transparent transform transition-all duration-300 hover:shadow-lg"
+     onclick="selectCard('sme')">
+
+    <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+    <img src="{% static 'images/icons/smesreg.png' %}" alt="" class="h-5 w-5">
+    SMEs Registration
+  </h2>
+  <p class="mb-4 text-gray-700">Register your business and apply for schemes</p>
+  <h3 class="text-sm font-medium text-gray-800 border-t border-gray-200 pt-4 mt-6 flex items-center gap-2">
+    <img src="{% static 'images/icons/smebdspwhy.png' %}" alt="" class="h-5 w-5">
+    Why Register as SME?
+  </h3>
+  <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+    <li>Access to government support.</li>
+    <li>Easier loans and funding more.</li>
+    <li>Business growth opportunities.</li>
+  </ul>
+</div>
+
+<!-- BDSP Card -->
+<div id="bdspCard"
+     class="cursor-pointer bg-white p-6 rounded-lg shadow-md border-2 border-transparent transform transition-all duration-300 hover:shadow-lg"
+     onclick="selectCard('bdsp')">
+  <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+    <img src="{% static 'images/icons/bdspreg.png' %}" alt="" class="h-5 w-5">
+    BDSP Registration
+  </h2>
+  <p class="mb-4 text-gray-700">Provide services to small and medium enterprises</p>
+  <h3 class="text-sm font-medium text-gray-800 border-t border-gray-200 pt-4 mt-6 flex items-center gap-2">
+    <img src="{% static 'images/icons/smebdspwhy.png' %}" alt="" class="h-5 w-5">
+    Why Register as BDSP?
+  </h3>
+
+
+    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+      <li>Get Recognized.</li>
+      <li>Access Opportunities.</li>
+      <li>Expand Network.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Continue Button -->
+<div class="text-center">
+  <button onclick="goToRegistration()" class="bg-[#E9EAEC] hover:bg-gray-300 text-black font-semibold px-6 py-3 rounded-md shadow-md transition">
+    Continue →
+  </button>
+</div>
+
+<!-- Selection Script -->
+<script>
+  let selected = null;
+
+  function selectCard(role) {
+  selected = role;
+
+  const sme = document.getElementById('smeCard');
+  const bdsp = document.getElementById('bdspCard');
+
+  sme.classList.remove('border-blue-600', 'scale-105');
+  bdsp.classList.remove('border-blue-600', 'scale-105');
+
+  if (role === 'sme') {
+    sme.classList.add('border-blue-600', 'scale-105');  
+
+  } else {
+    bdsp.classList.add('border-blue-600', 'scale-105');
+
+  }
+}
+
+
+  function goToRegistration() {
+    if (selected === 'sme') {
+      window.location.href = "#";
+    } else if (selected === 'bdsp') {
+      window.location.href = "#";
+    } else {
+      alert('Please select a role before continuing.');
+    }
+  }
+</script>
+
+{% endblock %}
