@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'widget_tweaks',
 
+    'ckeditor',
+    'ckeditor_uploader',
+
     'dashboard',
 ]
 
@@ -141,3 +144,33 @@ AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailBackend',  # your new backend
     'django.contrib.auth.backends.ModelBackend',  # optional fallback
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full',
+        'height': 300,
+        'width': '100%',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage',  # Image upload support
+            'image2',       # Advanced image features
+            'autogrow',     # Auto-expand editor
+            'embed',        # Embed media
+            'codesnippet',  # Code highlighting
+            'justify',      # Text alignment
+        ]),
+        'removePlugins': 'resize',
+        'toolbarCanCollapse': False,
+        'autoGrow_minHeight': 200,
+        'autoGrow_maxHeight': 600,
+        'filebrowserUploadUrl': "/ckeditor/upload/",
+        'filebrowserBrowseUrl': "/ckeditor/browse/",
+    }
+}

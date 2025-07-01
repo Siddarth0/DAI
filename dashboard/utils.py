@@ -1,11 +1,7 @@
 from django.urls import get_resolver, URLPattern, URLResolver
 from django.apps import apps
-import re
+from dashboard.templatetags.dashboard_tags import snake_to_title
 
-
-def snake_to_title(snake_str):
-    # Replace underscores with spaces and capitalize each word
-    return re.sub(r'_+', ' ', snake_str).title()
 
 def extract_named_urls(resolver=None, namespace_prefix=''):
     if resolver is None:

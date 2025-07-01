@@ -27,7 +27,10 @@
             {{ event.start_date|date:"M d, Y" }}{% if event.location %} - {{ event.location }}{% endif %}
           </p>
           <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ event.title }}</h3>
-          <p class="text-sm text-gray-600 line-clamp-3">{{ event.content|truncatewords:25 }}</p>
+          <div class="text-sm text-gray-600 line-clamp-3" style="font-family: inherit;">
+              {{ event.content|truncatewords:25|safe }}
+          </div>
+
         </div>
       </a>
       {% empty %}

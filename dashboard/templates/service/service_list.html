@@ -8,7 +8,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {% for service in services %}
-      <a href="{% url 'service_detail' service.id %}" class="bg-white rounded-xl shadow-md p-6 flex flex-col items-start border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+      <a href="{% url 'dashboard:service_detail' service.id %}" class="bg-white rounded-xl shadow-md p-6 flex flex-col items-start border border-gray-200 hover:shadow-lg transition-shadow duration-300">
         <div class="w-12 h-12 p-2 rounded-lg mb-4 flex items-center justify-center bg-gray-100">
           <img src="{{ service.icon.url }}" alt="{{ service.title }}" class="w-8 h-8"
                onerror="this.onerror=null;this.src='https://placehold.co/32x32/E0E0E0/808080?text=Icon';">

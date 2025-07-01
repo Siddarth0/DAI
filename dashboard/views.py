@@ -101,7 +101,7 @@ def model_list(request, model_name):
 
     all_fields = [f.name for f in model._meta.fields]
     has_is_active = 'is_active' in all_fields
-    fields = [f for f in all_fields if f not in ('id', 'is_active')]
+    fields = [f for f in all_fields if f not in ('id', 'is_active','created_at', 'updated_at')]
 
     return render(request, 'adminDashboard/model_list.html', {
         'model': model,
@@ -168,18 +168,32 @@ def model_edit(request, model_name, pk):
 def model_delete(request, model_name, pk):
     model = get_all_models().get(model_name)
     if not model:
-        return redirect('dashboard:dashboard_home')  # fixed
+        return redirect('dashboard:dashboard_home')
 
     instance = get_object_or_404(model, pk=pk)
-    if request.method == 'POST':
-        instance.delete()
-        return redirect('dashboard:model_list', model_name=model_name)  # fixed
 
-    return render(request, 'adminDashboard/model_confirm_delete.html', {
-        'object': instance,
-        'model_name': model_name,
-        'current_model_name': model_name,
-    })
+    if request.method == 'POST':
+        # Find child relationships
+        for related in model._meta.related_objects:
+            related_name = related.get_accessor_name()
+            related_queryset = getattr(instance, related_name).all()
+
+            # If there are children, move them to "Others"
+            if related_queryset.exists():
+                rel_model = related.related_model
+                field_name = related.field.name  # usually 'parent'
+
+                # Try to get or create "Others" instance (must exist per model!)
+                others_obj, created = model.objects.get_or_create(name="Others")
+
+                # Reassign all children to the "Others" item
+                related_queryset.update(**{field_name: others_obj})
+
+        instance.delete()
+        return redirect('dashboard:model_list', model_name=model_name)
+
+    # Fallback, shouldn't reach here since deletion is now modal
+    return redirect('dashboard:model_list', model_name=model_name)
 
 
 def login_view(request):

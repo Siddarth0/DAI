@@ -1,25 +1,15 @@
 from django import forms
-from .utils import extract_named_urls
 from .models import MenuItem, Banner, SMEStep, Service, Guidelines, NewsEvent, ContactInfo, Quicklinks, SocialLinks, Notice, CMSPage
+from dashboard.choices import get_internal_url_choices, get_cms_page_choices
+from django.utils import timezone
 
 
 
 class MenuItemAdminForm(forms.ModelForm):
 
-    internal_link = forms.ChoiceField(
-        choices=[],
-        required=False,
-        label='Internal Link'
-    )
-    cms_link = forms.ChoiceField(
-        choices=[],
-        required=False,
-        label='CMS Page'
-    )
-    external_link = forms.CharField(
-        required=False,
-        label='External URL'
-    )
+    internal_link = forms.ChoiceField(choices=[],required=False,label='Internal Link')
+    cms_link = forms.ChoiceField(choices=[],required=False,label='CMS Page')
+    external_link = forms.CharField(required=False,label='External URL')
 
     class Meta:
         model = MenuItem
@@ -28,12 +18,8 @@ class MenuItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        internal_choices = [('', 'Select Internal Route')] + extract_named_urls()
-        self.fields['internal_link'].choices = internal_choices
-
-
-        cms_choices = [('', 'Select CMS Page')] + [(page.id, page.title) for page in CMSPage.objects.all()]
-        self.fields['cms_link'].choices = cms_choices
+        self.fields['internal_link'].choices = get_internal_url_choices()
+        self.fields['cms_link'].choices = get_cms_page_choices()
 
 
         # Ensuring initial value for the correct link field based on instance type and link
@@ -47,6 +33,18 @@ class MenuItemAdminForm(forms.ModelForm):
             elif selected_type == 'external':
                 self.initial['external_link'] = self.instance.module
 
+    
+            def get_descendants(item):
+                children = item.children.all()
+                all_descendants = list(children)
+                for child in children:
+                    all_descendants += get_descendants(child)
+                return all_descendants
+
+            descendants = get_descendants(self.instance)
+            self.fields['parent'].queryset = MenuItem.objects.exclude(
+                pk__in=[self.instance.pk] + [d.pk for d in descendants]
+            )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -112,6 +110,34 @@ class NewsEventAdminForm(forms.ModelForm):
     class Meta:
         model = NewsEvent
         exclude = ['created_at', 'updated_at']
+        widgets = {
+            'start_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-input'
+            }),
+            'end_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-input'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        today = timezone.now().date().isoformat()
+        self.fields['start_date'].widget.attrs['min'] = today
+        self.fields['end_date'].widget.attrs['min'] = today
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get('start_date')
+        end = cleaned_data.get('end_date')
+        today = timezone.now().date()
+
+        if end and end < today:
+            self.add_error('end_date', "End date cannot be in the past.")
+
+        if start and end and start > end:
+            self.add_error('start_date', "Start date must be before or equal to end date.")
 
 
 class ContactInfoAdminForm(forms.ModelForm):

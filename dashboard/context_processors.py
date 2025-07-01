@@ -8,12 +8,14 @@ def global_context(request):
     social_links = SocialLinks.objects.all()
     raw_models = get_all_models()
 
-    models = [
-        (name, {
-            'class': model,
-            'verbose_name': model._meta.verbose_name_plural.title()
-        }) for name, model in raw_models.items()
-    ]
+    models = {
+    name: {
+        'class': model,
+        'verbose_name': model._meta.verbose_name_plural.replace('_', ' ').title()
+    }
+    for name, model in raw_models.items()
+}
+    
 
     return {
         'menu_items': menu_items,
@@ -22,3 +24,4 @@ def global_context(request):
         'social_links': social_links,
         'models': models,
     }
+

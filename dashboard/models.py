@@ -1,18 +1,13 @@
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from django.utils.text import slugify
-from django.urls import NoReverseMatch
-
+from dashboard.choices import MENU_TYPE_CHOICES
+from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.fields import RichTextField
 import datetime
 
 
 class MenuItem(models.Model):
-    MENU_TYPE_CHOICES = [
-        ('internal', 'Internal Page (by named URL)'),
-        ('external', 'External URL'),
-        ('cms', 'CMS Page'),
-    ]
-
 
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10, choices=MENU_TYPE_CHOICES, default='internal')
@@ -68,7 +63,7 @@ class Banner(models.Model):
 
     
 class SMEStep(models.Model):
-    icon = models.ImageField(upload_to='static/images/icons/') 
+    icon = models.ImageField(upload_to='uploads/icons/sme_steps/') 
     title = models.CharField(max_length=100)
     description = models.TextField()
     order = models.PositiveSmallIntegerField(default=0, help_text="Order in which the steps appear")
@@ -85,7 +80,7 @@ class Service(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=500)
     description = models.TextField(blank=True)
-    icon = models.FileField(upload_to='static/images/icons/')
+    icon = models.FileField(upload_to='uploads/icons/service/')
     order = models.PositiveIntegerField(default=0, help_text='Order in which the services appear')
 
     class Meta:
@@ -97,7 +92,7 @@ class Service(models.Model):
 class Guidelines(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    icon = models.FileField(upload_to='static/images/icons/')
+    icon = models.FileField(upload_to='uploads/icons/guidelines/')
     order = models.PositiveIntegerField(default=0, help_text='Order in which the services appear')
 
     class Meta:
@@ -109,9 +104,9 @@ class Guidelines(models.Model):
 
 class NewsEvent(models.Model):
     title = models.CharField(max_length = 255)
-    content = models.TextField()
+    content = RichTextUploadingField()
     location = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(upload_to='static/images/newspics/')
+    image = models.ImageField(upload_to='uploads/news/images')
     is_webinar = models.BooleanField(default=False)
     start_date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(default=datetime.date.today)
@@ -152,7 +147,7 @@ class Quicklinks(models.Model):
         return self.name
 
 class SocialLinks(models.Model):
-    icon = models.FileField(upload_to='static/images/icons/')
+    icon = models.FileField(upload_to='uploads/icons/sociallinks/')
     url= models.URLField()
 
     class Meta:
@@ -164,10 +159,10 @@ class SocialLinks(models.Model):
     
 class Notice(models.Model):
     title = models.CharField(max_length = 255)
-    content = models.TextField(blank=True)
+    content = RichTextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='static/notices/', blank=True, null=True)
-    pdf = models.FileField(upload_to='static/notices',blank=True, null=True)
+    image = models.ImageField(upload_to='uploads/notices/images/', blank=True, null=True)
+    pdf = models.FileField(upload_to='uploads/notices/pdfs/',blank=True, null=True)
     is_popup = models.BooleanField(default=False, help_text="Check to show this notice as a pop up")
     popup_order = models.PositiveIntegerField(blank = True, null=True, help_text="order of popup display if multiple") 
     is_active = models.BooleanField(default=True)
@@ -186,7 +181,7 @@ class Notice(models.Model):
 class CMSPage(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, max_length=255, editable=False)
-    content = models.TextField()
+    content = RichTextUploadingField()
     meta_tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated tags for SEO")
 
     created_at = models.DateTimeField(auto_now_add=True)
