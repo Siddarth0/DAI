@@ -124,8 +124,14 @@ class NewsEventAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         today = timezone.now().date().isoformat()
-        self.fields['start_date'].widget.attrs['min'] = today
-        self.fields['end_date'].widget.attrs['min'] = today
+        if not self.instance or not self.instance.pk:
+            # New instance — enforce min date = today
+            self.fields['start_date'].widget.attrs['min'] = today
+            self.fields['end_date'].widget.attrs['min'] = today
+        else:
+            # Editing existing instance — no min date restriction
+            self.fields['start_date'].widget.attrs.pop('min', None)
+            self.fields['end_date'].widget.attrs.pop('min', None)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -133,11 +139,18 @@ class NewsEventAdminForm(forms.ModelForm):
         end = cleaned_data.get('end_date')
         today = timezone.now().date()
 
-        if end and end < today:
-            self.add_error('end_date', "End date cannot be in the past.")
+        # If editing existing instance, skip the "end_date in past" check
+        if self.instance and self.instance.pk:
+            # Only check that start <= end if both provided
+            if start and end and start > end:
+                self.add_error('start_date', "Start date must be before or equal to end date.")
+        else:
+            # New instance validation
+            if end and end < today:
+                self.add_error('end_date', "End date cannot be in the past.")
 
-        if start and end and start > end:
-            self.add_error('start_date', "Start date must be before or equal to end date.")
+            if start and end and start > end:
+                self.add_error('start_date', "Start date must be before or equal to end date.")
 
 
 class ContactInfoAdminForm(forms.ModelForm):

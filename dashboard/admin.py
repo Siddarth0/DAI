@@ -41,8 +41,8 @@ class Guidelines(admin.ModelAdmin):
 
 @admin.register(NewsEvent)
 class NewsEventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'is_webinar', 'start_date', 'end_date')
-    list_filter = ('is_webinar', 'start_date', 'end_date', 'created_at')
+    list_display = ('title', 'category', 'start_date', 'end_date')
+    list_filter = ('category', 'start_date', 'end_date', 'created_at')
     ordering = ('-start_date',)
 
     readonly_fields = ('created_at', 'updated_at')

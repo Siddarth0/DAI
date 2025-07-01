@@ -17,3 +17,10 @@ def get_cms_page_choices():
     return [('', 'Select CMS Page')] + [
         (page.id, page.title) for page in CMSPage.objects.all()
     ]
+
+CATEGORY_CHOICES = [
+        ('news', 'News'),
+        ('webinar', 'Webinar'),
+        ('event', 'Event'),
+        # Add more categories as needed
+    ]

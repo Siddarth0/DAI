@@ -4,39 +4,132 @@
 {% block content %}
 <section class="bg-white py-16 px-6">
   <div class="max-w-7xl mx-auto">
+
+    <!-- Title -->
     <div class="text-center mb-12">
       <h1 class="text-4xl font-bold text-gray-900 mb-2">All News & Events</h1>
       <p class="text-lg text-gray-600">Stay updated with the latest news, webinars, and events.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {% for event in news_events %}
-      <a href="{% url 'dashboard:news_detail' event.id %}" class="bg-gray-50 hover:bg-white transition p-4 rounded-xl shadow group">
-        <div class="relative">
-          <img src="{{ event.image.url }}" alt="Event Image" class="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition duration-300">
-          {% if event.is_webinar and event.start_date > today %}
-            <span class="absolute top-4 left-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded shadow">Coming Soon</span>
-          {% elif event.is_webinar %}
-            <span class="absolute top-4 left-4 bg-purple-600 text-white text-xs px-2 py-1 rounded shadow">Webinar</span>
-          {% else %}
-            <span class="absolute top-4 left-4 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow">News</span>
-          {% endif %}
-        </div>
-        <div class="mt-4">
-          <p class="text-sm text-gray-500 mb-1">
-            {{ event.start_date|date:"M d, Y" }}{% if event.location %} - {{ event.location }}{% endif %}
-          </p>
-          <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ event.title }}</h3>
-          <div class="text-sm text-gray-600 line-clamp-3" style="font-family: inherit;">
-              {{ event.content|truncatewords:25|safe }}
-          </div>
-
-        </div>
-      </a>
-      {% empty %}
-      <p class="text-center col-span-3 text-gray-500">No events or news available at the moment.</p>
-      {% endfor %}
+    <!-- Tabs for categories -->
+    <div class="flex justify-center space-x-4 mb-12">
+      <button class="category-tab px-4 py-2 bg-blue-600 text-white rounded-md font-semibold focus:outline-none" data-target="news-section">News</button>
+      <button class="category-tab px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold focus:outline-none" data-target="webinars-section">Webinars</button>
+      <button class="category-tab px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold focus:outline-none" data-target="events-section">Events</button>
     </div>
+
+    <!-- News Section -->
+    <div id="news-section" class="category-section">
+      {% if news %}
+      <h2 class="text-2xl font-semibold mb-6">News</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for event in news %}
+        <a href="{% url 'dashboard:news_detail' event.id %}" class="bg-gray-50 hover:bg-white transition p-4 rounded-xl shadow group">
+          <div class="relative rounded-lg overflow-hidden">
+            <img src="{{ event.image.url }}" alt="News Image" class="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition duration-300">
+            <span class="absolute top-4 left-4 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow">News</span>
+          </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-500 mb-1">{{ event.start_date|date:"M d, Y" }}{% if event.location %} - {{ event.location }}{% endif %}</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">{{ event.title }}</h3>
+            <div class="text-sm text-gray-600 line-clamp-3" style="font-family: inherit;">
+              {{ event.content|striptags|truncatewords:25 }}
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+        <p class="text-center text-gray-500">No news available at the moment.</p>
+      {% endif %}
+    </div>
+
+    <!-- Webinars Section -->
+    <div id="webinars-section" class="category-section hidden">
+      {% if webinars %}
+      <h2 class="text-2xl font-semibold mb-6">Webinars</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for event in webinars %}
+        <a href="{% url 'dashboard:news_detail' event.id %}" class="bg-gray-50 hover:bg-white transition p-4 rounded-xl shadow group">
+          <div class="relative rounded-lg overflow-hidden">
+            <img src="{{ event.image.url }}" alt="Webinar Image" class="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition duration-300">
+            {% if event.start_date > today %}
+              <span class="absolute top-4 left-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded shadow">Coming Soon</span>
+            {% else %}
+              <span class="absolute top-4 left-4 bg-purple-600 text-white text-xs px-2 py-1 rounded shadow">Webinar</span>
+            {% endif %}
+          </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-500 mb-1">{{ event.start_date|date:"M d, Y" }}{% if event.location %} - {{ event.location }}{% endif %}</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">{{ event.title }}</h3>
+            <div class="text-sm text-gray-600 line-clamp-3" style="font-family: inherit;">
+              {{ event.content|striptags|truncatewords:25 }}
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+        <p class="text-center text-gray-500">No webinars available at the moment.</p>
+      {% endif %}
+    </div>
+
+    <!-- Events Section -->
+    <div id="events-section" class="category-section hidden">
+      {% if events %}
+      <h2 class="text-2xl font-semibold mb-6">Events</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for event in events %}
+        <a href="{% url 'dashboard:news_detail' event.id %}" class="bg-gray-50 hover:bg-white transition p-4 rounded-xl shadow group">
+          <div class="relative rounded-lg overflow-hidden">
+            <img src="{{ event.image.url }}" alt="Event Image" class="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition duration-300">
+            <span class="absolute top-4 left-4 bg-green-600 text-white text-xs px-2 py-1 rounded shadow">Event</span>
+          </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-500 mb-1">{{ event.start_date|date:"M d, Y" }}{% if event.location %} - {{ event.location }}{% endif %}</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">{{ event.title }}</h3>
+            <div class="text-sm text-gray-600 line-clamp-3" style="font-family: inherit;">
+              {{ event.content|striptags|truncatewords:25 }}
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+        <p class="text-center text-gray-500">No events available at the moment.</p>
+      {% endif %}
+    </div>
+
   </div>
 </section>
+
+<script>
+  // Tabs functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.category-tab');
+    const sections = document.querySelectorAll('.category-section');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active styles from all tabs
+        tabs.forEach(t => {
+          t.classList.remove('bg-blue-600', 'text-white');
+          t.classList.add('bg-gray-200', 'text-gray-700');
+        });
+
+        // Hide all sections
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Show selected section
+        const targetId = tab.getAttribute('data-target');
+        document.getElementById(targetId).classList.remove('hidden');
+
+        // Set active styles on clicked tab
+        tab.classList.add('bg-blue-600', 'text-white');
+        tab.classList.remove('bg-gray-200', 'text-gray-700');
+      });
+    });
+  });
+</script>
+
 {% endblock %}

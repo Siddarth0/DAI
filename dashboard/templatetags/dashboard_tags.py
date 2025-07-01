@@ -1,5 +1,5 @@
 from django import template
-import re
+import re, os
 
 register = template.Library()
 
@@ -26,3 +26,20 @@ def snake_to_title(value):
     value = value.replace('_', ' ')
     value = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', value)
     return value.title()
+
+
+@register.filter
+def file_extension(value):
+    """Return the lowercase file extension of a FileField or string."""
+    if not value:
+        return ''
+    name = getattr(value, 'name', '') or str(value)
+    return os.path.splitext(name)[1].lower()
+
+
+IMAGE_EXTENSIONS = {'.svg', '.png', '.jpg', '.jpeg', '.gif'}
+
+@register.filter
+def is_image_extension(value):
+    ext = file_extension(value)
+    return ext in IMAGE_EXTENSIONS

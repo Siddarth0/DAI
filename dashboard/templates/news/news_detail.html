@@ -3,66 +3,94 @@
 {% block content %}
 
 <section class="bg-white py-16 px-6">
-  <div class="max-w-4xl mx-auto">
-    
-    <!-- Back Button -->
-    <div class="mb-8">
-      <a href="{% url 'dashboard:news_list' %}" class="text-blue-600 hover:underline flex items-center">
-        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-        Back to News & Events
-      </a>
-    </div>
+  <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12">
 
-    <!-- Title and Meta -->
-    <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ event.title }}</h1>
-
-    <div class="flex flex-wrap items-center text-sm text-gray-500 mb-6 space-x-4">
-      <span>
-        {{ event.start_date|date:"F j, Y" }}
-        {% if event.start_date != event.end_date %} 
-          - {{ event.end_date|date:"F j, Y" }}
-        {% endif %}
-      </span>
-      {% if event.location %}
-        <span class="flex items-center">
-          <svg class="w-4 h-4 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 2C6.686 2 4 4.686 4 8c0 4.418 6 10 6 10s6-5.582 6-10c0-3.314-2.686-6-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z"/>
+    <!-- Main Content -->
+    <div class="flex-1 max-w-4xl mx-auto lg:mx-0">
+      
+      <!-- Back Button -->
+      <div class="mb-8">
+        <a href="{% url 'dashboard:news_list' %}" class="text-blue-600 hover:underline flex items-center">
+          <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          {{ event.location }}
+          Back to News & Events
+        </a>
+      </div>
+
+      <!-- Title and Meta -->
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ event.title }}</h1>
+
+      <div class="flex flex-wrap items-center text-sm text-gray-500 mb-6 space-x-4">
+        <span>
+          {{ event.start_date|date:"F j, Y" }}
+          {% if event.start_date != event.end_date %} 
+            - {{ event.end_date|date:"F j, Y" }}
+          {% endif %}
         </span>
+        {% if event.location %}
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2C6.686 2 4 4.686 4 8c0 4.418 6 10 6 10s6-5.582 6-10c0-3.314-2.686-6-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z"/>
+            </svg>
+            {{ event.location }}
+          </span>
+        {% endif %}
+        <span class="px-2 py-1 rounded text-xs font-semibold 
+          {% if event.is_webinar and event.start_date > today %}
+            bg-yellow-100 text-yellow-800
+          {% elif event.is_webinar %}
+            bg-purple-100 text-purple-800
+          {% else %}
+            bg-blue-100 text-blue-800
+          {% endif %}
+        ">
+          {% if event.is_webinar and event.start_date > today %}
+            Coming Soon
+          {% elif event.is_webinar %}
+            Webinar
+          {% else %}
+            News
+          {% endif %}
+        </span>
+      </div>
+
+      <!-- Image -->
+      {% if event.image %}
+        <div class="rounded-xl overflow-hidden mb-8 shadow-md">
+          <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-96 object-cover">
+        </div>
       {% endif %}
-      <span class="px-2 py-1 rounded text-xs font-semibold 
-        {% if event.is_webinar and event.start_date > today %}
-          bg-yellow-100 text-yellow-800
-        {% elif event.is_webinar %}
-          bg-purple-100 text-purple-800
-        {% else %}
-          bg-blue-100 text-blue-800
-        {% endif %}
-      ">
-        {% if event.is_webinar and event.start_date > today %}
-          Coming Soon
-        {% elif event.is_webinar %}
-          Webinar
-        {% else %}
-          News
-        {% endif %}
-      </span>
+
+      <!-- Content -->
+      <article class="prose prose-lg prose-blue max-w-none text-gray-800">
+        {{ event.content|safe }}
+      </article>
     </div>
 
-    <!-- Image -->
-    {% if event.image %}
-      <div class="rounded-xl overflow-hidden mb-8 shadow-md">
-        <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-96 object-cover">
+    <!-- Sidebar: Similar Category News -->
+    <aside class="w-full lg:w-80 sticky top-24 self-start">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">More in {{ event.category|capfirst }}</h2>
+      <div class="space-y-6">
+        {% for item in similar_events %}
+          {% if item.id != event.id %}
+          <a href="{% url 'dashboard:news_detail' item.id %}" class="flex items-center space-x-4 hover:bg-gray-100 rounded-lg p-2 transition">
+            {% if item.image %}
+              <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-16 h-16 object-cover rounded-md flex-shrink-0">
+            {% else %}
+              <div class="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0"></div>
+            {% endif %}
+            <div>
+              <h3 class="text-sm font-semibold text-gray-900 line-clamp-2">{{ item.title }}</h3>
+              <p class="text-xs text-gray-500">{{ item.start_date|date:"M d, Y" }}</p>
+            </div>
+          </a>
+          {% endif %}
+        {% empty %}
+          <p class="text-gray-500 text-sm">No related {{ event.category }} found.</p>
+        {% endfor %}
       </div>
-    {% endif %}
-
-    <!-- Content -->
-    <article class="prose prose-lg prose-blue max-w-none text-gray-800">
-      {{ event.content|safe }}
-    </article>
+    </aside>
 
   </div>
 </section>

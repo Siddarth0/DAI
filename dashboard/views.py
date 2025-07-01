@@ -56,15 +56,34 @@ def service_detail(request, id):
 
 def news_list(request):
     today = date.today()
-    news_events = NewsEvent.objects.filter(start_date__lte=today, end_date__gte=today).order_by('-start_date')
+    news = NewsEvent.objects.filter(category='news').order_by('-start_date')
+    
+
+    webinars = NewsEvent.objects.filter(category='webinar', start_date__lte=today, end_date__gte=today).order_by('-start_date')
+    events = NewsEvent.objects.filter(category='event', start_date__lte=today, end_date__gte=today).order_by('-start_date')
     return render(request, 'news/news_list.html', {
-        'news_events': news_events,
+        'news': news,
+        'webinars': webinars,
+        'events': events,
         'today': today,
     })
 
-def news_detail(request, id):
-    event = get_object_or_404(NewsEvent, id=id)
-    return render(request, 'news/news_detail.html', {'event': event})
+def news_detail(request, pk):
+    event = get_object_or_404(NewsEvent, pk=pk)
+    today = date.today()
+
+    # Get similar category events excluding current one
+    similar_events = NewsEvent.objects.filter(
+        category=event.category,
+        start_date__lte=today,
+        end_date__gte=today
+    ).exclude(pk=pk).order_by('-start_date')[:5]
+
+    return render(request, 'news/news_detail.html', {
+        'event': event,
+        'today': today,
+        'similar_events': similar_events,
+    })
 
 
 def cms_page_detail(request, slug):

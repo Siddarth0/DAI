@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse, NoReverseMatch
 from django.utils.text import slugify
-from dashboard.choices import MENU_TYPE_CHOICES
+from dashboard.choices import MENU_TYPE_CHOICES, CATEGORY_CHOICES
 from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
 import datetime
@@ -117,7 +117,7 @@ class NewsEvent(models.Model):
     content = RichTextUploadingField()
     location = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(upload_to='uploads/news/images')
-    is_webinar = models.BooleanField(default=False)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='news')
     start_date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(default=datetime.date.today)
     created_at = models.DateTimeField(auto_now_add=True)
