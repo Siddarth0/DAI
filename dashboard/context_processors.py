@@ -9,13 +9,12 @@ def global_context(request):
     raw_models = get_all_models()
 
     models = {
-    name: {
-        'class': model,
-        'verbose_name': model._meta.verbose_name_plural.replace('_', ' ').title()
+        name: {
+            'class': model_info['model'],
+            'verbose_name': model_info['verbose_name_plural'].replace('_', ' ').title()
+        }
+        for name, model_info in raw_models.items()
     }
-    for name, model in raw_models.items()
-}
-    
 
     return {
         'menu_items': menu_items,
@@ -24,4 +23,5 @@ def global_context(request):
         'social_links': social_links,
         'models': models,
     }
+
 

@@ -72,7 +72,7 @@
                     {% else %}
                       text-gray-700 hover:bg-gray-100 hover:text-blue-600
                     {% endif %}">
-            {{ info.verbose_name|default:name|capfirst }}
+            {{ info.verbose_name|default:name }}
           </a>
         {% empty %}
           <p class="text-sm text-gray-500">No models found</p>

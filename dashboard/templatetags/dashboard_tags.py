@@ -18,6 +18,11 @@ def get_item(dictionary, key):
     return dictionary.get(key)
 
 @register.filter
-def snake_to_title(snake_str):
-    # Replace underscores with spaces and capitalize each word
-    return re.sub(r'_+', ' ', snake_str).title()
+def snake_to_title(value):
+    if not isinstance(value, str):
+        return value
+
+    # Handle both snake_case and PascalCase
+    value = value.replace('_', ' ')
+    value = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', value)
+    return value.title()

@@ -80,9 +80,11 @@ def dashboard_home(request):
 
 @login_required
 def model_list(request, model_name):
-    model = get_all_models().get(model_name)
-    if not model:
+    model_info = get_all_models().get(model_name)
+    if not model_info:
         return redirect('dashboard:dashboard_home') 
+    
+    model = model_info['model']  # <-- extract the model class here
 
     search_query = request.GET.get('q', '')
     order_by = request.GET.get('order_by', '-id')
@@ -101,7 +103,7 @@ def model_list(request, model_name):
 
     all_fields = [f.name for f in model._meta.fields]
     has_is_active = 'is_active' in all_fields
-    fields = [f for f in all_fields if f not in ('id', 'is_active','created_at', 'updated_at')]
+    fields = [f for f in all_fields if f not in ('id', 'is_active', 'created_at', 'updated_at')]
 
     return render(request, 'adminDashboard/model_list.html', {
         'model': model,
@@ -111,14 +113,17 @@ def model_list(request, model_name):
         'fields': fields,
         'has_is_active': has_is_active,
         'search_query': search_query,
+        'verbose_name': model_info['verbose_name'],  # optionally pass for template
+        'verbose_name_plural': model_info['verbose_name_plural'],  # optionally pass for template
     })
-
 
 @login_required
 def model_add(request, model_name):
-    model = get_all_models().get(model_name)
-    if not model:
-        return redirect('dashboard:dashboard_home')  # fixed
+    model_info = get_all_models().get(model_name)
+    if not model_info:
+        return redirect('dashboard:dashboard_home')
+
+    model = model_info['model']  # ✅ Extract actual model class
 
     FormClass = FORM_MAP.get(model_name)
     if not FormClass:
@@ -128,7 +133,7 @@ def model_add(request, model_name):
 
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('dashboard:model_list', model_name=model_name)  # fixed
+        return redirect('dashboard:model_list', model_name=model_name)
 
     return render(request, 'adminDashboard/model_form.html', {
         'form': form,
@@ -140,21 +145,25 @@ def model_add(request, model_name):
 
 @login_required
 def model_edit(request, model_name, pk):
-    model = get_all_models().get(model_name)
-    if not model:
-        return redirect('dashboard:dashboard_home')  # fixed
+    model_info = get_all_models().get(model_name)  # ✅ model_info is a dict
+    if not model_info:
+        return redirect('dashboard:dashboard_home')
+
+    model = model_info['model']  # ✅ Get actual model class
 
     instance = get_object_or_404(model, pk=pk)
 
     FormClass = FORM_MAP.get(model_name)
     if not FormClass:
-        FormClass = modelform_factory(model, fields=[f.name for f in model._meta.fields if f.editable and f.name != 'id'])
+        FormClass = modelform_factory(model, fields=[
+            f.name for f in model._meta.fields if f.editable and f.name != 'id'
+        ])
 
     form = FormClass(request.POST or None, request.FILES or None, instance=instance)
 
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('dashboard:model_list', model_name=model_name)  # fixed
+        return redirect('dashboard:model_list', model_name=model_name)
 
     return render(request, 'adminDashboard/model_form.html', {
         'form': form,
@@ -163,12 +172,13 @@ def model_edit(request, model_name, pk):
         'mode': 'Edit',
     })
 
-
 @login_required
 def model_delete(request, model_name, pk):
-    model = get_all_models().get(model_name)
-    if not model:
+    model_info = get_all_models().get(model_name)
+    if not model_info:
         return redirect('dashboard:dashboard_home')
+
+    model = model_info['model']  # ✅ Extract the actual model class
 
     instance = get_object_or_404(model, pk=pk)
 
@@ -178,21 +188,19 @@ def model_delete(request, model_name, pk):
             related_name = related.get_accessor_name()
             related_queryset = getattr(instance, related_name).all()
 
-            # If there are children, move them to "Others"
             if related_queryset.exists():
                 rel_model = related.related_model
-                field_name = related.field.name  # usually 'parent'
+                field_name = related.field.name
 
                 # Try to get or create "Others" instance (must exist per model!)
                 others_obj, created = model.objects.get_or_create(name="Others")
 
-                # Reassign all children to the "Others" item
+                # Reassign children
                 related_queryset.update(**{field_name: others_obj})
 
         instance.delete()
         return redirect('dashboard:model_list', model_name=model_name)
 
-    # Fallback, shouldn't reach here since deletion is now modal
     return redirect('dashboard:model_list', model_name=model_name)
 
 
@@ -216,32 +224,3 @@ def login_view(request):
 
 def welcome_page(request):
     return render(request, 'authys/welcomePage.html')
-
-
-
-
-
-
-
-
-# //cms CMSPage
-# //truncate words
-# //verbose menuitems
-# //sankkefiy admin titles
-# //learn more if we can simplfy passing the context since we are passing every context from the views
-# start date end date,, add logic to prevent enetering old startdate than today
-# no need to show created at updated at at admin
-# add paginations on the lists
-# is active button needed for notices/ banners/ wherever necessary
-# learn more about [:4] what it does, what if we want to access the last items? waht if [: 1,2,5]
-# in the content field, add WYSIWYG editor
-# merge all apps and porevent making the apps unnecessarily
-# categorize the news instead of tags
-# add * to mark compulsory fields
-# a child can never be the parent of its parent
-# when deleting any items, instead of redirecting , popup display( for parent containing child, deleteing parent should popup a warning shwoing what it might afffect)
-# when parent contating children is deleted, it should automatically shift to a auto built other item .
-# def get_absolute_url learn about it, what is this function called. 
-# separate list choices from the logic into a separate component
-# 
-

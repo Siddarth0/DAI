@@ -19,6 +19,8 @@ class MenuItem(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Menu Item"
+        verbose_name_plural = "Menu Items"
 
     def __str__(self):
         return self.name
@@ -56,6 +58,8 @@ class Banner(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Banner"
+        verbose_name_plural = "Banners"
 
     def __str__(self):
         return f"{self.order}: {self.title}"
@@ -70,6 +74,8 @@ class SMEStep(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = "SME Step"
+        verbose_name_plural = "SME Steps"
     
     def __str__(self):
         return self.title
@@ -85,6 +91,8 @@ class Service(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Service"
+        verbose_name_plural = "Services"
 
     def __str__(self):
         return self.title
@@ -97,6 +105,8 @@ class Guidelines(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Guidelines"
+        verbose_name_plural = "Guidelines"
 
     def __str__(self):
         return self.title
@@ -112,6 +122,10 @@ class NewsEvent(models.Model):
     end_date = models.DateField(default=datetime.date.today)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "News Event"
+        verbose_name_plural = "News Events"
     
     def __str__(self):
         return self.title
