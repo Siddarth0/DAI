@@ -135,10 +135,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-LOGIN_URL = 'login/'
-LOGIN_REDIRECT_URL = '/' 
-LOGOUT_REDIRECT_URL = '/login/'
+from django.urls import reverse_lazy
+LOGIN_URL = reverse_lazy('dashboard:login')
+LOGIN_REDIRECT_URL = reverse_lazy('dashboard:dashboard_home')
+LOGOUT_REDIRECT_URL = reverse_lazy('dashboard:login')
 
 AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailBackend',  # your new backend

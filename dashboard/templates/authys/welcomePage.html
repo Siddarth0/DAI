@@ -87,9 +87,9 @@
 
   function goToRegistration() {
     if (selected === 'sme') {
-      window.location.href = "#";
+      window.location.href = "{% url 'dashboard:sme_registration' %}";
     } else if (selected === 'bdsp') {
-      window.location.href = "#";
+      window.location.href = "{% url 'dashboard:bdsp_registration' %}";
     } else {
       alert('Please select a role before continuing.');
     }

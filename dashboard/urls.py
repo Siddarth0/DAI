@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from . import views
 
@@ -12,15 +13,15 @@ urlpatterns = [
     path('services/', views.service_list, name='service_list'),
     path('services/<int:id>/', views.service_detail, name='service_detail'),
     path('news/', views.news_list, name='news_list'),
-    path('news/<int:id>/', views.news_detail, name='news_detail'),
+    path('news/<int:pk>/', views.news_detail, name='news_detail'),
     path('cms/<slug:slug>/', views.cms_page_detail, name='cms_page_detail'),
 
     # Admin Dashboard routes
-    path('dashboard/', views.dashboard_home, name='dashboard_home'),
-    path('dashboard/<str:model_name>/', views.model_list, name='model_list'),
-    path('dashboard/<str:model_name>/add/', views.model_add, name='model_add'),
-    path('dashboard/<str:model_name>/<int:pk>/edit/', views.model_edit, name='model_edit'),
-    path('dashboard/<str:model_name>/<int:pk>/delete/', views.model_delete, name='model_delete'),
+    path('dashboard/', login_required(views.dashboard_home), name='dashboard_home'),
+    path('dashboard/<str:model_name>/', login_required(views.model_list), name='model_list'),
+    path('dashboard/<str:model_name>/add/', login_required(views.model_add), name='model_add'),
+    path('dashboard/<str:model_name>/<int:pk>/edit/', login_required(views.model_edit), name='model_edit'),
+    path('dashboard/<str:model_name>/<int:pk>/delete/', login_required(views.model_delete), name='model_delete'),
 
     # Auth routes (Login/Logout)
     path('login/', views.login_view, name='login'),
@@ -28,4 +29,7 @@ urlpatterns = [
 
     # Register
     path('welcomePage/', views.welcome_page, name='welcome_page'),
+    path('register/sme/', views.sme_registration, name='sme_registration'),
+    path('register/bdsp/', views.bdsp_registration, name='bdsp_registration'),
+
 ]

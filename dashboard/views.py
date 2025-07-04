@@ -224,22 +224,27 @@ def model_delete(request, model_name, pk):
 
 
 def login_view(request):
+    next_url = request.GET.get('next') or request.POST.get('next')
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-
         user = authenticate(request, username=email, password=password)
+
         if user is not None:
             login(request, user)
-            if user.is_staff or user.is_superuser:
-                return redirect('dashboard:dashboard_home')  # fixed
-            return redirect('dashboard:landing_page')
+            return redirect(next_url or 'dashboard:dashboard_home')
         else:
             messages.error(request, "Invalid email or password.")
-            return render(request, 'authys/login.html')
 
     return render(request, 'authys/login.html')
 
 
 def welcome_page(request):
     return render(request, 'authys/welcomePage.html')
+
+def sme_registration(request):
+    return render(request, 'register/sme.html')
+
+def bdsp_registration(request):
+    return render(request, 'register/bdsp.html')
+
