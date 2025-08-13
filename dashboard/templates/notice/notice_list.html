@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-10">
+  <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">📌 Latest Notices</h2>
+
+  {% if notices %}
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {% for notice in notices %}
+        <a href="{% url 'dashboard:notice_detail' notice.id %}"
+           class="bg-white shadow-md hover:shadow-xl border border-gray-100 rounded-xl overflow-hidden transition duration-300 group flex flex-col">
+          
+          <!-- Image -->
+          {% if notice.image %}
+            <img src="{{ notice.image.url }}" alt="{{ notice.title }}"
+                 class="h-48 w-full object-cover group-hover:scale-105 transition duration-200">
+          {% else %}
+            <img src="{% static 'notices/default_notice.jpg' %}" alt="Default Notice Image"
+                 class="h-48 w-full object-cover group-hover:scale-105 transition duration-200">
+          {% endif %}
+
+          <!-- Content -->
+          <div class="p-5 flex flex-col justify-between flex-1">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition">
+              {{ notice.title }}
+            </h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+              {{ notice.content|truncatechars:120 }}
+            </p>
+            <div class="text-sm text-gray-400 mt-auto">
+              📅 {{ notice.created_at|date:"F j, Y" }}
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center text-gray-500 text-lg mt-20">No notices available at the moment.</p>
+  {% endif %}
+</div>
+{% endblock %}

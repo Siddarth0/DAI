@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% if landing_page_content %}{{ landing_page_content.title|striptags }}{% else %}My Django Landing Page{% endif %}{% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background for consistency */
+        }
+    </style>
+    {% block meta_tags %}
+    <meta name="keywords" content="default, keywords, here">
+    {% endblock %}
+</head>
+<body class="antialiased">
+    <!-- Include the header template from the partials directory -->
+    {% include 'partials/header.html' with landing_page_content=landing_page_content %}
+
+    <main>
+        {% block content %}
+        <!-- Content will be injected here by extending templates -->
+        {% endblock %}
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="/static/js/script.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    {% comment %} <script src="/static/js/dropdown.js"></script> {% endcomment %}
+
+    <!-- Include the footer template from the partials directory -->
+    {% include 'partials/footer.html' with landing_page_content=landing_page_content %}    
+
+</body>
+</html>
